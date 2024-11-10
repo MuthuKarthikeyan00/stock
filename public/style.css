@@ -1,0 +1,43 @@
+
+.header_conatiner {
+    height: 7vh;
+    display: flex;
+}
+
+.header_left {
+    flex: 13;
+}
+
+.header_right {
+    flex: 87;
+}
+
+.main_conatiner {
+    height: 93vh;
+    display: flex;
+}
+
+.main_left {
+    flex: 13;
+}
+
+.main_right {
+    flex: 87;
+}
+
+
+.nav-link {
+    color: #333;
+    padding: 10px 15px;
+    text-decoration: none;
+}
+
+.nav-link:hover {
+    background-color: #f8f9fa;
+    color: #007bff;
+}
+
+.nav-link.active {
+    background-color: #007bff;
+    color: white;
+}

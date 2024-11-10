@@ -1,0 +1,38 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        title Bootstrap demo
+        link(href="/bootstrap/css/bootstrap.min.css", rel="stylesheet")
+        link(href="/style.css", rel="stylesheet")
+        script(src="/bootstrap/js/bootstrap.bundle.min.js")
+    body
+        header(class='header_conatiner border') 
+            section(class='header_left d-flex justify-content-center align-items-center border')  
+                h3 stocks
+            section(class='header_right border')  
+                h1 mk
+        section(class='main_conatiner border') 
+            aside(class='main_left border')  
+                nav.flex-column.nav
+                    a.nav-link.active(href="employee") Employee Master
+                    a.nav-link(href="#") Asset Master
+                    a.nav-link(href="#") Asset Category Master
+                    a.nav-link(href="#") Stock View
+                    a.nav-link(href="#") Asset History
+            main(class='main_right border')  
+                block content
+        script.
+            //- (() => {
+            //-     const forms = document.querySelectorAll('.needs-validation')
+            //-     Array.prototype.slice.call(forms).forEach(form => {
+            //-         form.addEventListener('submit', event => {
+            //-             if (!form.checkValidity()) {
+            //-                 event.preventDefault()
+            //-                 event.stopPropagation()
+            //-             }
+            //-             form.classList.add('was-validated')
+            //-         }, false)
+            //-     })
+            //- })()
