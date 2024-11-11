@@ -1,37 +1,111 @@
 extends layouts/main.pug
 
+
 block content
-    ul.nav.nav-tabs(role="tablist")
-        li.nav-item
-            a.nav-link.active(aria-current="page", href="#view", data-bs-toggle="tab") View
-        li.nav-item
-            a.nav-link(href="#add", data-bs-toggle="tab") Add
-    .tab-content.p-4
-        .tab-pane.fade.show.active#view(role="tabpanel")
-            h2 View
-        .tab-pane.fade#add(role="tabpanel")
-            form.row.g-3.needs-validation(action="/employee" method="post" enctype="multipart/form-data" novalidate)
-                .col-md-6
-                    label(for="firstName").form-label First name
-                    input#firstName.form-control(type="text", name="firstName", value="", required)
-                    .valid-feedback Looks good!
-                .col-md-6
-                    label(for="lastName").form-label Last name
-                    input#lastName.form-control(type="text", name="lastName", value="", required)
-                    .valid-feedback Looks good!
-                .col-md-6
-                    label(for="email").form-label Email
-                    input#email.form-control(type="email", name="email", value="", required)
-                    .valid-feedback Looks good!
-                .col-md-6
-                    label(for="phone").form-label Phone
-                    input#phone.form-control(type="text", name="phone", required)
-                    .invalid-feedback Please provide a valid phone.
-                .col-md-6
-                    label(for="role").form-label Role
-                    select#validationCustom04.form-select(name="role", required)
-                        option(selected disabled value="") Choose Role...
-                        option(value="one") One
-                    .invalid-feedback Please select a valid role.
-                .col-12
-                    button.btn.btn-primary(type="submit") Submit form
+    if data && data.id > 0 
+        ul.nav.nav-tabs(role="tablist")
+            li.nav-item
+                a.nav-link.active(aria-current="page", href="#edit", data-bs-toggle="tab") EDIT
+        .tab-content.p-4
+            .tab-pane.fade.show.active#edit(role="tabpanel")
+                form.row.g-3.needs-validation(action=`/employee/${data.id}` method="post" enctype="multipart/form-data" novalidate)
+                    .col-md-6
+                        label(for="name").form-label  name
+                        input#name.form-control(type="text", name="name", value=data.name, required)
+                        .valid-feedback Looks good!
+                    .col-md-6
+                        label(for="email").form-label Email
+                        input#email.form-control(type="email", name="email", value=data.email, required)
+                        .valid-feedback Looks good!
+                    .col-md-6
+                        label(for="phone").form-label Phone
+                        input#phone.form-control(type="text", name="phone", value=data.phone, required)
+                        .invalid-feedback Please provide a valid phone.
+                    .col-md-6
+                        label(for="role").form-label Role
+                        select#validationCustom04.form-select(name="roleId", required)
+                            each employeeRole in employeeRoles
+                                if employeeRole.id == data.roleId  
+                                   option(value=employeeRole.id) #{employeeRole.name}
+                                else  
+                                   option(value=employeeRole.id) #{employeeRole.name}                                   
+                        .invalid-feedback Please select a valid role.
+                    .col-md-6
+                        label(for="status").form-label status
+                        select#validationCustom04.form-select(name="status", required)
+                                if data.roleId = 1  
+                                   option(selected  value="1") Active
+                                   option(  value="2") Deactive
+                                else  
+                                   option(value="1") Active
+                                   option(selected  value="2") Deactive
+                        .invalid-feedback Please select a valid status.                        
+                    .col-12
+                        button.btn.btn-primary(type="submit") Submit form
+    else 
+        ul.nav.nav-tabs(role="tablist")
+            li.nav-item
+                a.nav-link.active(aria-current="page", href="#view", data-bs-toggle="tab") View
+            li.nav-item
+                a.nav-link(href="#add", data-bs-toggle="tab") Add
+        .tab-content.p-4
+            .tab-pane.fade.show.active#view(role="tabpanel")
+                table#employee.table.table-striped.table-bordered
+                    thead
+                        tr
+                            th Name
+                            th Email
+                            th Phone
+                            th Role Id
+                            th Status
+                    tbody
+            .tab-pane.fade#add(role="tabpanel")
+                form.row.g-3.needs-validation(action="/employee" method="post" enctype="multipart/form-data" novalidate)
+                    .col-md-6
+                        label(for="name").form-label  name
+                        input#name.form-control(type="text", name="name", value="", required)
+                        .valid-feedback Looks good!
+                    .col-md-6
+                        label(for="email").form-label Email
+                        input#email.form-control(type="email", name="email", value="", required)
+                        .valid-feedback Looks good!
+                    .col-md-6
+                        label(for="phone").form-label Phone
+                        input#phone.form-control(type="text", name="phone", required)
+                        .invalid-feedback Please provide a valid phone.
+                    .col-md-6
+                        label(for="role").form-label Role
+                        select#validationCustom04.form-select(name="roleId", required)
+                            each employeeRole in employeeRoles
+                                option(value=employeeRole.id) #{employeeRole.name}
+                        .invalid-feedback Please select a valid role.
+                    .col-md-6
+                        label(for="status").form-label status
+                        select#validationCustom04.form-select(name="status", required)
+                            option(selected disabled value="") Choose status...
+                            option(value=1) Active
+                            option(value=2) Deactive
+                        .invalid-feedback Please select a valid status.                        
+                    .col-12
+                        button.btn.btn-primary(type="submit") Submit form
+
+        script(src='https://code.jquery.com/jquery-3.6.0.min.js')
+        script(src="https://cdn.datatables.net/2.1.8/js/dataTables.js")
+        script(src='/datatable.js')
+        script.
+            initializeDataTable('#employee', '/getEmployee', [
+                { data: 'name' },
+                { data: 'email' },
+                { data: 'phone' },
+                { data: 'roleId' },
+                { data: 'status' },
+                {
+                    data: 'id', 
+                    render: function(data, type, row) {
+                        return `
+                            <a href="http://localhost:7100/employee/${data}" class="btn btn-primary edit-btn" data-id="${data}">Edit</a>
+                            <a href="http://localhost:7100/employeeDelete/${data}" class="btn btn-danger delete-btn" data-id="${data}">Delete</a>
+                        `;
+                    }
+                }
+            ]);

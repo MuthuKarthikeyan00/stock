@@ -13,7 +13,11 @@ export default class Routers {
         }
 
         this.router.get('/employee',Employee.render);
+        this.router.get('/employee/:id',Employee.render);
+        this.router.post('/getEmployee',Employee.fetch);
         this.router.post('/employee',Employee.create);
+        this.router.post('/employee/:id',Employee.update);
+        this.router.get('/employeeDelete/:id',Employee.delete);
 
         this.router.get('/employeeRole',EmployeeRole.render);
         this.router.get('/employeeRole/:id',EmployeeRole.render);

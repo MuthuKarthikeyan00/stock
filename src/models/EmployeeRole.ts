@@ -7,7 +7,7 @@ import { TinyIntegerDataType } from 'sequelize';
 interface EmployeeRoleAttributes {
   id?: number;  // Optional id because it's auto-incremented
   name: string;
-  isDeleted?: number;
+  isDeleted?: number | null;
   createdAt?: string;
   updatedAt?: string;
 }@Table({
@@ -32,7 +32,7 @@ export class EmployeeRole extends Model<EmployeeRole,EmployeeRoleAttributes> {
     type: DataType.SMALLINT,
     allowNull: true,
   })
-  isDeleted!: number;
+  isDeleted!: number | null;
 
   @Column({
     type: DataType.DATE,

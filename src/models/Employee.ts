@@ -2,11 +2,13 @@ import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from 'sequelize
 import { EmployeeRole } from "./EmployeeRole";
 interface EmployeeAttributes {
   id?: number; 
-  firstName: string;
-  lastName?: string;
+  name: string;
   email: string;
   phone: number;
   roleId: number;
+  status:string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 @Table({
   tableName: 'employees',
