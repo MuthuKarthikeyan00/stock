@@ -25,49 +25,7 @@ html(lang="en")
                     a.nav-link(href="#") Asset History
             main(class='main_right border')  
                 block content
-        script(src='https://code.jquery.com/jquery-3.6.0.min.js')
-        script(src="https://cdn.datatables.net/2.1.8/js/dataTables.js")
-        script.
-            $(document).ready(function() {
-                $('#example').DataTable( {
-                    serverSide: true,
-                    ajax: {
-                        url: '/getEmployeeRole',
-                        type: 'POST',
-                        data: function(d) {
-                            
-                            return {
-                                draw: d.draw,
-                                offset: d.start,
-                                limit: d.length,
-                                search: {
-                                    value: d.search.value,
-                                },
-                                order: d,
-                                orderColumn: d.order[0].column,
-                                orderDir: d.order[0].dir,
 
-                            };
-                        },
-                    },
-                    columns: [
-                        { data: 'name' },
-                          { data: 'id' },
-                        {
-                            data: 'id', 
-                            render: function(data, type, row) {
-                                return `
-                                    <a href="http://localhost:7100/employeeRole/${data}" class="btn btn-primary edit-btn" data-id="${data}">Edit</a>
-                                    <a href="http://localhost:7100/employeeRoleDelete/${data}" class="btn btn-danger delete-btn" data-id="${data}">Delete</a>
-                                `;
-                            },
-                        },
-                    ],
-                    responsive: true,
-                    paging: true,
-                    searching: true,
-                } );
-            });
             //- (() => {
             //-     const forms = document.querySelectorAll('.needs-validation')
             //-     Array.prototype.slice.call(forms).forEach(form => {

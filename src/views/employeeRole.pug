@@ -1,7 +1,6 @@
 extends layouts/main.pug
 
 block content
-
     if data && data.id > 0 
         ul.nav.nav-tabs(role="tablist")
             li.nav-item
@@ -39,3 +38,22 @@ block content
                         .valid-feedback Looks good!
                     .col-12
                         button.btn.btn-primary(type="submit") Submit form
+            //- Ensure that jQuery and DataTables scripts are loaded before your custom script
+   
+        script(src='https://code.jquery.com/jquery-3.6.0.min.js')
+        script(src="https://cdn.datatables.net/2.1.8/js/dataTables.js")
+        script(src='/datatable.js')
+        script.
+            initializeDataTable('#example', '/getEmployeeRole', [
+                { data: 'name' },
+                { data: 'id' },
+                {
+                    data: 'id', 
+                    render: function(data, type, row) {
+                        return `
+                            <a href="http://localhost:7100/employeeRole/${data}" class="btn btn-primary edit-btn" data-id="${data}">Edit</a>
+                            <a href="http://localhost:7100/employeeRoleDelete/${data}" class="btn btn-danger delete-btn" data-id="${data}">Delete</a>
+                        `;
+                    }
+                }
+            ]);
