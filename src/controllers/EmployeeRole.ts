@@ -11,7 +11,20 @@ import { Op } from "sequelize";
 
 export default class EmployeeRole {
   public static async render(req: Request, res: Response) {
-    return res.status(200).render('employeeRole', {});
+   
+     let data ;
+     let id = Utils.convertTONumber(req.params.id);
+     if (Utils.isGraterthenZero(id)) {
+       data = await EmployeeRoleModel.findOne({
+         where: {
+           id
+         },
+       })
+ 
+     }
+    return res.status(200).render('employeeRole', {
+      data
+    });
   }
 
   private static async handleData(body: any) {
@@ -130,21 +143,30 @@ export default class EmployeeRole {
 
     try{
 
-      const { offset , limit , draw , search} = req.body;
-      const searchValue = search?.value || ''; // Access the search value
+      let { offset , limit , draw , search,orderColumn,orderDir} = req.body;
+      const searchValue = search?.value || ''; 
+      const order = req.body.order;
+      const orderBy = order?.columns[orderColumn]?.data;
+      orderColumn = orderBy || "id";
+      orderDir = orderDir || "desc";
+ 
   
-      const whereClause = searchValue
-        ? {
-            [Op.or]: [
-              { name: { [Op.iLike]: `%${searchValue}%` } },
-            ],
-          }
-        : {};
+      const whereClause = {
+        isDeleted: null,  
+        ...(searchValue && {
+          [Op.or]: [
+            { name: { [Op.iLike]: `%${searchValue}%` } },
+          ],
+        }),
+      };
+      
     
       const data = await EmployeeRoleModel.findAndCountAll({
         where: whereClause,
       offset: offset,
       limit: limit,
+      order: [[String(orderColumn), String(orderDir)]], 
+        
     });
 
     res.json({
