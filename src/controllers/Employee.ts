@@ -11,18 +11,13 @@ export default class Employee {
             // Extract data from the form (req.body)
             const { firstName, lastName, email, phone, role_id } = req.body;
       
-            // // Validate the data (you can add more validations as needed)
-            // if (!firstName || !lastName || !email || !phone || !role_id) {
-            //   return res.status(400).send('All fields are required');
-            // }
-      
-            // Create a new employee record in the database
+
             const newEmployee = await EmployeeModel.create({
                 firstName: 'John',
                 lastName: 'Doe',
                 email: 'john.doe@example.com',
-                phone: '1234567890',
-                role_id: 1,  // You can adjust the role_id as per your requirements
+                phone: 123456789,
+                roleId: 1,  // You can adjust the role_id as per your requirements
             });
       
             // Respond with a success message and the created employee data

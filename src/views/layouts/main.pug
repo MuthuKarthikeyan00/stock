@@ -6,6 +6,7 @@ html(lang="en")
         title Bootstrap demo
         link(href="/bootstrap/css/bootstrap.min.css", rel="stylesheet")
         link(href="/style.css", rel="stylesheet")
+        link(rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css")
         script(src="/bootstrap/js/bootstrap.bundle.min.js")
     body
         header(class='header_conatiner border') 
@@ -17,13 +18,55 @@ html(lang="en")
             aside(class='main_left border')  
                 nav.flex-column.nav
                     a.nav-link.active(href="employee") Employee Master
+                    a.nav-link(href="employeeRole") Employee Role
                     a.nav-link(href="#") Asset Master
                     a.nav-link(href="#") Asset Category Master
                     a.nav-link(href="#") Stock View
                     a.nav-link(href="#") Asset History
             main(class='main_right border')  
                 block content
+        script(src='https://code.jquery.com/jquery-3.6.0.min.js')
+        script(src="https://cdn.datatables.net/2.1.8/js/dataTables.js")
         script.
+            $(document).ready(function() {
+                $('#example').DataTable( {
+                    serverSide: true,
+                    ajax: {
+                        url: '/getEmployeeRole',
+                        type: 'POST',
+                        data: function(d) {
+                            
+                            return {
+                                draw: d.draw,
+                                offset: d.start,
+                                limit: d.length,
+                                search: {
+                                    value: d.search.value,
+                                },
+                                order: d, // Pass the order parameters to the server
+
+                            };
+                        },
+                    },
+                    columns: [
+                        { data: 'name' },
+                          { data: 'id' },
+                        {
+                            data: 'id', // You can use the 'id' to uniquely identify each row for edit/delete actions
+                            render: function(data, type, row) {
+                                // Create the Edit and Delete buttons and bind the actions
+                                return `
+                                    <button class="btn btn-primary edit-btn" data-id="${data}">Edit</button>
+                                    <button class="btn btn-danger delete-btn" data-id="${data}">Delete</button>
+                                `;
+                            },
+                        },
+                    ],
+                    responsive: true,
+                    paging: true,
+                    searching: true,
+                } );
+            });
             //- (() => {
             //-     const forms = document.querySelectorAll('.needs-validation')
             //-     Array.prototype.slice.call(forms).forEach(form => {

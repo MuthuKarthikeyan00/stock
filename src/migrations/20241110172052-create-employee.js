@@ -11,32 +11,48 @@ module.exports = {
         autoIncrement: true,
         allowNull: false
       },
-      firstName: {
+      name: {
         type: Sequelize.STRING,
-        allowNull: false
-      },
-      lastName: {
-        type: Sequelize.STRING,
+        unique: true,
         allowNull: false
       },
       email: {
         type: Sequelize.STRING,
+        unique: true,
         allowNull: false
       },
       phone: {
         type: Sequelize.STRING,
+        unique: true,
         allowNull: false
       },
-      role_id: {
+      roleId: {
         type: Sequelize.INTEGER,
-        allowNull: false
+        allowNull: false,
+        references: {
+          model: 'employee_roles',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      status: {
+        type: Sequelize.SMALLINT,
+        allowNull: true
+      },
+      isDeleted: {
+        type: Sequelize.SMALLINT,
+        defaultValue: null,
+        allowNull: true
       },
       createdAt: {
         type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW,
         allowNull: false
       },
       updatedAt: {
         type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW,
         allowNull: false
       }
     });
