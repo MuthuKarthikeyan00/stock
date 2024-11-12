@@ -1,6 +1,7 @@
-import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
 import { AssetType } from "./AssetType";
 import { AssetCategory } from "./AssetCategory";
+import { AssetTransaction } from './AssetTransaction';
 
 
 interface AssetAttributes {
@@ -68,9 +69,12 @@ export class Asset extends Model<Asset, AssetAttributes> {
   isDeleted!: number;
 
 
-  @BelongsTo(() => AssetType) // New association
-  AssetType!: AssetType;
+  @BelongsTo(() => AssetType) 
+  assetType!: AssetType;
 
-  @BelongsTo(() => AssetCategory) // New association
-  AssetCategory!: AssetCategory;
+  @BelongsTo(() => AssetCategory) 
+  assetCategory!: AssetCategory;
+
+  @HasMany(() => AssetTransaction)
+  assetTransactions!: AssetTransaction[];
 }

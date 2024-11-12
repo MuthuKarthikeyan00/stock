@@ -1,5 +1,6 @@
-import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
 import { EmployeeRole } from "./EmployeeRole";
+import { AssetTransaction } from './AssetTransaction';
 interface EmployeeAttributes {
   id?: number; 
   name: string;
@@ -56,5 +57,8 @@ export class Employee extends Model<Employee,EmployeeAttributes> {
   isDeleted!: number;
 
   @BelongsTo(() => EmployeeRole)
-  EmployeeRole!: EmployeeRole;
+  employeeRole!: EmployeeRole;
+
+  @HasMany(() => AssetTransaction)
+  assetTransactions!: AssetTransaction[];
 }

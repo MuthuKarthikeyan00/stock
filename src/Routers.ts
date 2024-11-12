@@ -5,6 +5,7 @@ import EmployeeRole from './controllers/EmployeeRole';
 import AssetCategory from './controllers/AssetCategory';
 import Asset from './controllers/Asset';
 import AssetType from './controllers/AssetType';
+import AssetTransaction from './controllers/AssetTransacton';
 
 export default class Routers {
     private static router = Router();
@@ -29,7 +30,6 @@ export default class Routers {
         this.router.post('/employeeRole/:id',EmployeeRole.update);
         this.router.get('/employeeRoleDelete/:id',EmployeeRole.delete);
 
-
         this.router.get('/asset',Asset.render);
         this.router.get('/asset/:id',Asset.render);
         this.router.post('/getAsset',Asset.fetch);
@@ -50,13 +50,18 @@ export default class Routers {
         this.router.post('/assetType',AssetType.create);
         this.router.post('/assetType/:id',AssetType.update);
         this.router.get('/assetTypeDelete/:id',AssetType.delete);
-        
+
+        this.router.get('/assetIssue',AssetTransaction.IssueRender);
+        this.router.get('/assetReturn',AssetTransaction.returnRender);
+        this.router.get('/assetScrap',AssetTransaction.scrapRender);
+
+
 
         this.router.get('/', (req: Request, res: Response) => {
             res.status(200).render('index', {
               docTitle: "",
             });
-          });
+        });
 
         return this.router;
     }

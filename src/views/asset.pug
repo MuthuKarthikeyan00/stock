@@ -35,9 +35,9 @@ block content
                         select#validattypeIdionCustom04.form-select(name="typeId", required)
                             each assetType in assetTypes
                                 if assetType.id == data.typeId  
-                                   option(value=assetType.typeId) #{assetType.name}
+                                   option(value=assetType.id) #{assetType.name}
                                 else  
-                                   option(value=assetType.typeId) #{assetType.name}                                   
+                                   option(value=assetType.id) #{assetType.name}                                   
                         .invalid-feedback Please select a valid Type.    
                     .col-md-6
                         label(for="status").form-label status
@@ -114,7 +114,7 @@ block content
                 { data: 'serialNumber' },
                 { data: 'model' },
                 { data: 'categoryId' },
-                { data: 'roleId' },
+                { data: 'typeId' },
                 { data: 'status' },
                 {
                     data: 'id', 

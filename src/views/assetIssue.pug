@@ -1,0 +1,25 @@
+extends layouts/main.pug
+
+block content
+        ul.nav.nav-tabs(role="tablist")
+            li.nav-item
+                a.nav-link.active(aria-current="page", href="#add", data-bs-toggle="tab") Add
+
+        .tab-content.p-4
+            .tab-pane.fade.show.active#add(role="tabpanel")
+                form.row.g-3.needs-validation(action="/assetType" method="post" enctype="multipart/form-data" novalidate)
+                    .col-md-6
+                        label(for="assetId").form-label Asset
+                        select#assetId.form-select(name="assetId", required)
+                            each employeeRole in employeeRoles
+                                option(value=employeeRole.id) #{employeeRole.name}
+                        .invalid-feedback Please select a valid role.
+                    .col-md-6
+                        label(for="employeeId").form-label employee
+                        select#employeeId.form-select(name="employeeId", required)
+                            each employeeRole in employeeRoles
+                                option(value=employeeRole.id) #{employeeRole.name}
+                        .invalid-feedback Please select a valid employee.                        
+                    .col-12
+                        button.btn.btn-primary(type="submit") Submit form
+
