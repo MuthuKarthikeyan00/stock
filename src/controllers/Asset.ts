@@ -1,20 +1,27 @@
 import Sanitizer from "@src/helpers/Sanitizer";
 import Utils from "@src/helpers/Utils";
-import { Employee as EmployeeModel } from "@src/models/Employee";
+import { Asset as AssetModel } from "@src/models/Asset";
 import { Request, Response } from "express";
 import ResponseHandler from "../helpers/ResponseHandler";
 import Validator from "@src/validator/Validator";
-import { employeeValidationSchema } from "@src/validator/schema";
-import { Op, where } from "sequelize";
-import { EmployeeRole as EmployeeRoleModel } from "@src/models/EmployeeRole";
+import { assetValidationSchema } from "@src/validator/schema";
+import { Op } from "sequelize";
+import { AssetCategory } from "@src/models/AssetCategory";
+import { AssetType } from "@src/models/AssetType";
 
 
 
-export default class Employee {
+
+export default class Asset {
   public static async render(req: Request, res: Response) {
 
 
-    const employeeRoles = await EmployeeRoleModel.findAll({
+    const assetCategories = await AssetCategory.findAll({
+      where: {
+        isDeleted: null, 
+      },
+    });
+    const assetTypes = await AssetType.findAll({
       where: {
         isDeleted: null, 
       },
@@ -23,26 +30,28 @@ export default class Employee {
     let data;
     let id = Utils.convertTONumber(req.params.id);
     if (Utils.isGraterthenZero(id)) {
-      data = await EmployeeModel.findOne({
+      data = await AssetModel.findOne({
         where: {
           id
         },
       })
     }
 
-    return res.status(200).render('employee', {
+    return res.status(200).render('asset', {
       data,
-      employeeRoles
+      assetCategories,
+      assetTypes
     });
   }
 
   private static async handleData(body: any) {
     return Sanitizer.sanitizeHtml({
       name: String(body.name),
-      email: String(body.email),
-      phone: Number(body.phone),
+      serialNumber: String(body.serialNumber),
+      model: String(body.model),
       status: Number(body.status),
-      roleId: Number(body.roleId),
+      typeId: Number(body.typeId),
+      categoryId: Number(body.categoryId),
     });
   }
 
@@ -50,14 +59,15 @@ export default class Employee {
 
     try {
       const body = req.body;
-      const args = await Employee.handleData(body);
-      const status = await Validator.validate(args, employeeValidationSchema, res)
+      const args = await Asset.handleData(body);
+      const status = await Validator.validate(args, assetValidationSchema, res)
 
-      const data = await EmployeeModel.create({
+      const data = await AssetModel.create({
         name: args.name,
-        email: args.email,
-        phone: args.phone,
-        roleId: args.roleId,
+        serialNumber: args.serialNumber,
+        model: args.model,
+        typeId: args.typeId,
+        categoryId: args.categoryId,
         status: args.status,
         createdAt: new Date().toISOString(),
       });
@@ -86,11 +96,11 @@ export default class Employee {
       }
 
 
-      const args = await Employee.handleData(body);
-      const status = await Validator.validate(args, employeeValidationSchema, res)
+      const args = await Asset.handleData(body);
+      const status = await Validator.validate(args, assetValidationSchema, res)
       args.updatedAt = new Date().toISOString();
 
-      const isValid = await EmployeeModel.findOne({
+      const isValid = await AssetModel.findOne({
         where: {
           id,
         },
@@ -103,7 +113,7 @@ export default class Employee {
         );
       }
 
-      const updated_id = await EmployeeModel.update(args, {
+      const updated_id = await AssetModel.update(args, {
         where: {
           id,
         }
@@ -130,7 +140,7 @@ export default class Employee {
         );
       }
 
-      const isValid = await EmployeeModel.findOne({
+      const isValid = await AssetModel.findOne({
         where: {
           id,
         },
@@ -143,7 +153,7 @@ export default class Employee {
         );
       }
 
-      const updated_id = await EmployeeModel.update({ isDeleted: 1 }, {
+      const updated_id = await AssetModel.update({ isDeleted: 1 }, {
         where: {
           id,
         }
@@ -178,7 +188,7 @@ export default class Employee {
       };
 
 
-      const data = await EmployeeModel.findAndCountAll({
+      const data = await AssetModel.findAndCountAll({
         where: whereClause,
         offset: offset,
         limit: limit,

@@ -9,6 +9,15 @@ export const employeeValidationSchema = z.object({
   roleId: z.number().positive().min(1),
 });
 
+export const assetValidationSchema = z.object({
+  name: z.string().min(1).max(255),
+  model: z.string().min(1).max(255),
+  serialNumber:z.string().min(1).max(255),
+  status: z.number().positive().max(2).min(1),
+  typeId: z.number().positive().min(1),
+  categoryId: z.number().positive().min(1),
+});
+
 export const employeeRoleValidationSchema = z.object({
   name: z.string().min(1).max(255),
 });

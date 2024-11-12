@@ -1,67 +1,52 @@
 import Sanitizer from "@src/helpers/Sanitizer";
 import Utils from "@src/helpers/Utils";
-import { Employee as EmployeeModel } from "@src/models/Employee";
+import { AssetCategory as AssetCategoryModel } from "@src/models/AssetCategory";
 import { Request, Response } from "express";
 import ResponseHandler from "../helpers/ResponseHandler";
 import Validator from "@src/validator/Validator";
-import { employeeValidationSchema } from "@src/validator/schema";
-import { Op, where } from "sequelize";
-import { EmployeeRole as EmployeeRoleModel } from "@src/models/EmployeeRole";
+import { employeeRoleValidationSchema } from "@src/validator/schema";
+import { Op } from "sequelize";
 
 
 
-export default class Employee {
+export default class AssetCategory {
   public static async render(req: Request, res: Response) {
-
-
-    const employeeRoles = await EmployeeRoleModel.findAll({
-      where: {
-        isDeleted: null, 
-      },
-    });
-    
-    let data;
-    let id = Utils.convertTONumber(req.params.id);
-    if (Utils.isGraterthenZero(id)) {
-      data = await EmployeeModel.findOne({
-        where: {
-          id
-        },
-      })
-    }
-
-    return res.status(200).render('employee', {
-      data,
-      employeeRoles
+   
+     let data ;
+     let id = Utils.convertTONumber(req.params.id);
+     if (Utils.isGraterthenZero(id)) {
+       data = await AssetCategoryModel.findOne({
+         where: {
+           id
+         },
+       })
+ 
+     }
+    return res.status(200).render('assetCategory', {
+      data
     });
   }
 
   private static async handleData(body: any) {
     return Sanitizer.sanitizeHtml({
       name: String(body.name),
-      email: String(body.email),
-      phone: Number(body.phone),
-      status: Number(body.status),
-      roleId: Number(body.roleId),
     });
   }
 
   public static async create(req: Request, res: Response) {
 
     try {
-      const body = req.body;
-      const args = await Employee.handleData(body);
-      const status = await Validator.validate(args, employeeValidationSchema, res)
 
-      const data = await EmployeeModel.create({
+      const status = await Validator.validate(req.body, employeeRoleValidationSchema, res)
+
+      const body = req.body;
+      const args = await AssetCategory.handleData(body);
+
+      const data = await AssetCategoryModel.create({
         name: args.name,
-        email: args.email,
-        phone: args.phone,
-        roleId: args.roleId,
-        status: args.status,
         createdAt: new Date().toISOString(),
       });
-
+      
       if (Utils.isGraterthenZero(data.id)) return ResponseHandler.success(res, 201, data);
       return ResponseHandler.error(res);
 
@@ -84,13 +69,11 @@ export default class Employee {
           "invalid id"
         );
       }
-
-
-      const args = await Employee.handleData(body);
-      const status = await Validator.validate(args, employeeValidationSchema, res)
+      const status = await Validator.validate(req.body, employeeRoleValidationSchema, res)
+      const args = await AssetCategory.handleData(body);
       args.updatedAt = new Date().toISOString();
 
-      const isValid = await EmployeeModel.findOne({
+      const isValid = await AssetCategoryModel.findOne({
         where: {
           id,
         },
@@ -103,12 +86,12 @@ export default class Employee {
         );
       }
 
-      const updated_id = await EmployeeModel.update(args, {
+      const updated_id = await AssetCategoryModel.update(args, {
         where: {
           id,
         }
       });
-
+     
       if (Utils.isGraterthenZero(updated_id[0])) return ResponseHandler.success(res, 200, {});
       return ResponseHandler.error(res);
     } catch (error) {
@@ -130,7 +113,7 @@ export default class Employee {
         );
       }
 
-      const isValid = await EmployeeModel.findOne({
+      const isValid = await AssetCategoryModel.findOne({
         where: {
           id,
         },
@@ -143,12 +126,12 @@ export default class Employee {
         );
       }
 
-      const updated_id = await EmployeeModel.update({ isDeleted: 1 }, {
+      const updated_id = await AssetCategoryModel.update({isDeleted: 1}, {
         where: {
           id,
         }
       });
-
+     
       if (Utils.isGraterthenZero(updated_id[0])) return ResponseHandler.success(res, 200, {});
       return ResponseHandler.error(res);
     } catch (error) {
@@ -158,43 +141,48 @@ export default class Employee {
 
   public static async fetch(req: Request, res: Response) {
 
-    try {
+    try{
 
-      let { offset, limit, draw, search, orderColumn, orderDir } = req.body;
-      const searchValue = search?.value || '';
+      let { offset , limit , draw , search,orderColumn,orderDir} = req.body;
+      const searchValue = search?.value || ''; 
       const order = req.body.order;
       const orderBy = order?.columns[orderColumn]?.data;
       orderColumn = orderBy || "id";
       orderDir = orderDir || "desc";
-
-
+ 
+  
       const whereClause = {
-        isDeleted: null,
+        isDeleted: null,  
         ...(searchValue && {
           [Op.or]: [
             { name: { [Op.iLike]: `%${searchValue}%` } },
           ],
         }),
       };
-
-
-      const data = await EmployeeModel.findAndCountAll({
+      
+    
+      const data = await AssetCategoryModel.findAndCountAll({
         where: whereClause,
-        offset: offset,
-        limit: limit,
-        order: [[String(orderColumn), String(orderDir)]],
+      offset: offset,
+      limit: limit,
+      order: [[String(orderColumn), String(orderDir)]], 
+        
+    });
 
-      });
-
-      res.json({
+    res.json({
         draw: draw,
         recordsTotal: data.count,
         recordsFiltered: data.count,
         data: data.rows,
-      });
+    });
 
-    } catch (error) {
+      
+
+    }catch(error){
+
     }
+
   }
+
 
 }
