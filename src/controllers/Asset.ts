@@ -9,6 +9,7 @@ import { literal, Op } from "sequelize";
 import  AssetCategory  from "@src/controllers/AssetCategory";
 import  AssetType  from "@src/controllers/AssetType";
 import AssetStatus from "./AssetStatus";
+import { Employee } from "@src/models/Employee";
 
 
 
@@ -206,12 +207,13 @@ export default class Asset {
 
   public static async fetch(args: any = {}) {
     const search = args?.search || '';
-    const statusIds = args?.statusIds || [1, 2, 3, 4] ;
-
+    const statusIds = args?.statusIds || [1, 2, 3, 4];
+  
     const assetCategories = await AssetModel.findAll({
       attributes: [
-        [literal(`CONCAT("model", '-', "serialNumber", '-', "name")`), 'label'],
-        ['id', 'value']
+        [literal(`CONCAT("Asset"."model", '-', "Asset"."serialNumber", '-', "Asset"."name")`), 'label'],
+        ['id', 'value'],
+        ['employeeId', 'employeeId'],
       ],
       where: {
         isDeleted: {
@@ -223,14 +225,21 @@ export default class Asset {
           { model: { [Op.like]: `%${search}%` } },
         ],
         statusId: {
-          [Op.in]: statusIds 
+          [Op.in]: [1,2,3,4,5]
         }
       },
+      include: [
+        {
+          model: Employee,
+          attributes: [['name', 'Name']],
+          required: true 
+        }
+      ],
       raw: true
     });
    
-    return   assetCategories;
-
+    return assetCategories;
   }
+  
 
 }
