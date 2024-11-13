@@ -1,15 +1,18 @@
 import { Table, Column, Model, DataType, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
 import { EmployeeRole } from "./EmployeeRole";
 import { AssetTransaction } from './AssetTransaction';
+import { EmployeeBranch } from './EmployeeBranch';
 interface EmployeeAttributes {
   id?: number; 
   name: string;
   email: string;
   phone: number;
   roleId: number;
-  status:string;
+  branchId:number;
+  isDeleted?: number | null;
   createdAt?: string;
   updatedAt?: string;
+
 }
 @Table({
   tableName: 'employees',
@@ -44,20 +47,24 @@ export class Employee extends Model<Employee,EmployeeAttributes> {
   })
   roleId!: number;
 
+  @ForeignKey(() => EmployeeBranch)
   @Column({
     type: DataType.SMALLINT,
     allowNull: false,
   })
-  status!: number;
+  branchId!: number;
 
   @Column({
     type: DataType.SMALLINT,
     allowNull: true,
   })
-  isDeleted!: number;
+  isDeleted!: number | null;
 
   @BelongsTo(() => EmployeeRole)
   employeeRole!: EmployeeRole;
+
+  @BelongsTo(() => EmployeeBranch)
+  employeeBranch!: EmployeeBranch;
 
   @HasMany(() => AssetTransaction)
   assetTransactions!: AssetTransaction[];

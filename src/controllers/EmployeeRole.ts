@@ -139,7 +139,7 @@ export default class EmployeeRole {
     }
   }
 
-  public static async fetch(req: Request, res: Response) {
+  public static async getEmployeeRole(req: Request, res: Response) {
 
     try{
 
@@ -184,5 +184,27 @@ export default class EmployeeRole {
 
   }
 
+  public static async fetch(args: any = {}) {
+    const search = args?.search || '';
+
+    const assetCategories = await EmployeeRoleModel.findAll({
+      attributes: [
+        ['id', 'value'],
+        ['name', 'label']
+      ],
+      where: {
+        isDeleted: {
+          [Op.is]: null
+        },
+        [Op.or]: [
+          { name: { [Op.like]: `%${search}%` } },
+        ]
+      },
+      raw: true
+    });
+   
+    return   assetCategories;
+
+  }
 
 }

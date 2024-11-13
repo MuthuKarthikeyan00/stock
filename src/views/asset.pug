@@ -26,29 +26,28 @@ block content
                         select#categoryId.form-select(name="categoryId", required)
                             each assetCategory  in assetCategories
                                 if assetCategory.id == data.categoryId  
-                                   option(value=assetCategory.id) #{assetCategory.name}
+                                   option(value=assetCategory.id) #{assetCategory.label}
                                 else  
-                                   option(value=assetCategory.id) #{assetCategory.name}                                   
+                                   option(value=assetCategory.id) #{assetCategory.label}                                   
                         .invalid-feedback Please select a valid category.
                     .col-md-6
                         label(for="typeId").form-label Type
                         select#validattypeIdionCustom04.form-select(name="typeId", required)
                             each assetType in assetTypes
-                                if assetType.id == data.typeId  
-                                   option(value=assetType.id) #{assetType.name}
+                                if assetType.value == data.typeId  
+                                   option(value=assetType.value) #{assetType.label}
                                 else  
-                                   option(value=assetType.id) #{assetType.name}                                   
+                                   option(value=assetType.value) #{assetType.label}                                   
                         .invalid-feedback Please select a valid Type.    
                     .col-md-6
-                        label(for="status").form-label status
-                        select#validationCustom04.form-select(name="status", required)
-                                if data.status = 1  
-                                   option(selected  value="1") Active
-                                   option(  value="2") Deactive
+                        label(for="statusId").form-label Type
+                        select#validattypeIdionCustom04.form-select(name="statusId", required)
+                            each assetStatus in assetStatuses
+                                if assetStatus.value == data.statusId  
+                                   option(value=assetStatus.value) #{assetStatus.label}
                                 else  
-                                   option(value="1") Active
-                                   option(selected  value="2") Deactive
-                        .invalid-feedback Please select a valid status.                        
+                                   option(value=assetStatus.value) #{assetStatus.label}                                   
+                        .invalid-feedback Please select a valid status.                      
                     .col-12
                         button.btn.btn-primary(type="submit") Submit form
     else 
@@ -87,16 +86,22 @@ block content
                         label(for="categoryId").form-label Category
                         select#categoryId.form-select(name="categoryId", required)
                             each assetCategory in assetCategories
-                                option(value=assetCategory.id) #{assetCategory.name}
+                                option(value=assetCategory.value) #{assetCategory.label}
                         .invalid-feedback Please select a valid Category.
                     .col-md-6
                         label(for="typeId").form-label Type
                         select#typeId.form-select(name="typeId", required)
                             each assetType in assetTypes
-                                option(value=assetType.id) #{assetType.name}
+                                option(value=assetType.value) #{assetType.label}
+                        .invalid-feedback Please select a valid Type.                        
+
+                    .col-md-6
+                        label(for="typeId").form-label Status
+                        select#typeId.form-select(name="typeId", required)
+                            each assetStatus in assetStatuses
+                                option(value=assetStatus.value) #{assetStatus.label}
                         .invalid-feedback Please select a valid Type.                        
                     .col-md-6
-                        label(for="status").form-label Status
                         select#validationCustom04.form-select(name="status", required)
                             option(selected disabled value="") Choose status...
                             option(value=1) Active

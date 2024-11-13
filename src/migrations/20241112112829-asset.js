@@ -46,9 +46,15 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      status: {
-        type: Sequelize.SMALLINT,
-        allowNull: true
+      statusId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'asset_statuses',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       isDeleted: {
         type: Sequelize.SMALLINT,

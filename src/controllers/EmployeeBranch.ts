@@ -1,69 +1,52 @@
 import Sanitizer from "@src/helpers/Sanitizer";
 import Utils from "@src/helpers/Utils";
-import { Asset as AssetModel } from "@src/models/Asset";
+import { EmployeeBranch as EmployeeBranchModel } from "@src/models/EmployeeBranch";
 import { Request, Response } from "express";
 import ResponseHandler from "../helpers/ResponseHandler";
 import Validator from "@src/validator/Validator";
-import { assetValidationSchema } from "@src/validator/schema";
+import { employeeRoleValidationSchema } from "@src/validator/schema";
 import { literal, Op } from "sequelize";
-import  AssetCategory  from "@src/controllers/AssetCategory";
-import  AssetType  from "@src/controllers/AssetType";
 
 
 
-
-export default class Asset {
+export default class EmployeeBranch {
   public static async render(req: Request, res: Response) {
-
-
-    const assetCategories = await AssetCategory.fetch();
-    const assetTypes = await AssetType.fetch();
-    
-    let data;
-    let id = Utils.convertTONumber(req.params.id);
-    if (Utils.isGraterthenZero(id)) {
-      data = await AssetModel.findOne({
-        where: {
-          id
-        },
-      })
-    }
-
-    return res.status(200).render('asset', {
-      data,
-      assetCategories,
-      assetTypes
+   
+     let data ;
+     let id = Utils.convertTONumber(req.params.id);
+     if (Utils.isGraterthenZero(id)) {
+       data = await EmployeeBranchModel.findOne({
+         where: {
+           id
+         },
+       })
+ 
+     }
+    return res.status(200).render('employeeBranch', {
+      data
     });
   }
 
   private static async handleData(body: any) {
     return Sanitizer.sanitizeHtml({
       name: String(body.name),
-      serialNumber: String(body.serialNumber),
-      model: String(body.model),
-      status: Number(body.status),
-      typeId: Number(body.typeId),
-      categoryId: Number(body.categoryId),
     });
   }
 
   public static async create(req: Request, res: Response) {
 
     try {
-      const body = req.body;
-      const args = await Asset.handleData(body);
-      const status = await Validator.validate(args, assetValidationSchema, res)
 
-      const data = await AssetModel.create({
+      const status = await Validator.validate(req.body, employeeRoleValidationSchema, res)
+
+      const body = req.body;
+      const args = await EmployeeBranch.handleData(body);
+
+      const data = await EmployeeBranchModel.create({
         name: args.name,
-        serialNumber: args.serialNumber,
-        model: args.model,
-        typeId: args.typeId,
-        categoryId: args.categoryId,
-        status: args.status,
         createdAt: new Date().toISOString(),
       });
-
+      
       if (Utils.isGraterthenZero(data.id)) return ResponseHandler.success(res, 201, data);
       return ResponseHandler.error(res);
 
@@ -86,13 +69,11 @@ export default class Asset {
           "invalid id"
         );
       }
-
-
-      const args = await Asset.handleData(body);
-      const status = await Validator.validate(args, assetValidationSchema, res)
+      const status = await Validator.validate(req.body, employeeRoleValidationSchema, res)
+      const args = await EmployeeBranch.handleData(body);
       args.updatedAt = new Date().toISOString();
 
-      const isValid = await AssetModel.findOne({
+      const isValid = await EmployeeBranchModel.findOne({
         where: {
           id,
         },
@@ -105,12 +86,12 @@ export default class Asset {
         );
       }
 
-      const updated_id = await AssetModel.update(args, {
+      const updated_id = await EmployeeBranchModel.update(args, {
         where: {
           id,
         }
       });
-
+     
       if (Utils.isGraterthenZero(updated_id[0])) return ResponseHandler.success(res, 200, {});
       return ResponseHandler.error(res);
     } catch (error) {
@@ -132,7 +113,7 @@ export default class Asset {
         );
       }
 
-      const isValid = await AssetModel.findOne({
+      const isValid = await EmployeeBranchModel.findOne({
         where: {
           id,
         },
@@ -145,12 +126,12 @@ export default class Asset {
         );
       }
 
-      const updated_id = await AssetModel.update({ isDeleted: 1 }, {
+      const updated_id = await EmployeeBranchModel.update({isDeleted: 1}, {
         where: {
           id,
         }
       });
-
+     
       if (Utils.isGraterthenZero(updated_id[0])) return ResponseHandler.success(res, 200, {});
       return ResponseHandler.error(res);
     } catch (error) {
@@ -158,63 +139,65 @@ export default class Asset {
     }
   }
 
-  public static async getAssets(req: Request, res: Response) {
+  public static async getEmployeeBranch(req: Request, res: Response) {
 
-    try {
+    try{
 
-      let { offset, limit, draw, search, orderColumn, orderDir } = req.body;
-      const searchValue = search?.value || '';
+      let { offset , limit , draw , search,orderColumn,orderDir} = req.body;
+      const searchValue = search?.value || ''; 
       const order = req.body.order;
       const orderBy = order?.columns[orderColumn]?.data;
       orderColumn = orderBy || "id";
       orderDir = orderDir || "desc";
-
-
+ 
+  
       const whereClause = {
-        isDeleted: null,
+        isDeleted: null,  
         ...(searchValue && {
           [Op.or]: [
             { name: { [Op.iLike]: `%${searchValue}%` } },
           ],
         }),
       };
-
-
-      const data = await AssetModel.findAndCountAll({
+      
+    
+      const data = await EmployeeBranchModel.findAndCountAll({
         where: whereClause,
-        offset: offset,
-        limit: limit,
-        order: [[String(orderColumn), String(orderDir)]],
+      offset: offset,
+      limit: limit,
+      order: [[String(orderColumn), String(orderDir)]], 
+        
+    });
 
-      });
-
-      res.json({
+    res.json({
         draw: draw,
         recordsTotal: data.count,
         recordsFiltered: data.count,
         data: data.rows,
-      });
+    });
 
-    } catch (error) {
+      
+
+    }catch(error){
+
     }
+
   }
 
   public static async fetch(args: any = {}) {
     const search = args?.search || '';
 
-    const assetCategories = await AssetModel.findAll({
+    const assetCategories = await EmployeeBranchModel.findAll({
       attributes: [
-        [literal(`CONCAT("model", '-', "serialNumber", '-', "name")`), 'label'],
-        ['id', 'value']
+        ['id', 'value'],
+        ['name', 'label']
       ],
       where: {
         isDeleted: {
           [Op.is]: null
         },
         [Op.or]: [
-          { serialNumber: { [Op.like]: `%${search}%` } },
           { name: { [Op.like]: `%${search}%` } },
-          { model: { [Op.like]: `%${search}%` } },
         ]
       },
       raw: true
@@ -223,5 +206,6 @@ export default class Asset {
     return   assetCategories;
 
   }
+
 
 }

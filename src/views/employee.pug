@@ -23,23 +23,22 @@ block content
                         .invalid-feedback Please provide a valid phone.
                     .col-md-6
                         label(for="role").form-label Role
-                        select#validationCustom04.form-select(name="roleId", required)
-                            each employeeRole in employeeRoles
-                                if employeeRole.id == data.roleId  
-                                   option(value=employeeRole.id) #{employeeRole.name}
+                        select#roleId.form-select(name="roleId", required)
+                            each role in roles
+                                if role.id == data.roleId  
+                                   option(value=role.value) #{role.label}
                                 else  
-                                   option(value=employeeRole.id) #{employeeRole.name}                                   
+                                   option(value=role.value) #{role.label}                                   
                         .invalid-feedback Please select a valid role.
                     .col-md-6
-                        label(for="status").form-label status
-                        select#validationCustom04.form-select(name="status", required)
-                                if data.roleId = 1  
-                                   option(selected  value="1") Active
-                                   option(  value="2") Deactive
+                        label(for="branchId").form-label Role
+                        select#branchId.form-select(name="branchId", required)
+                            each branch in branches
+                                if branch.id == data.branchId  
+                                   option(value=branch.value) #{branch.label}
                                 else  
-                                   option(value="1") Active
-                                   option(selected  value="2") Deactive
-                        .invalid-feedback Please select a valid status.                        
+                                   option(value=branch.value) #{branch.label}                                   
+                        .invalid-feedback Please select a valid Branch.                      
                     .col-12
                         button.btn.btn-primary(type="submit") Submit form
     else 
@@ -56,8 +55,8 @@ block content
                             th Name
                             th Email
                             th Phone
-                            th Role Id
-                            th Status
+                            th Role 
+                            th Branch
                     tbody
             .tab-pane.fade#add(role="tabpanel")
                 form.row.g-3.needs-validation(action="/employee" method="post" enctype="multipart/form-data" novalidate)
@@ -75,17 +74,16 @@ block content
                         .invalid-feedback Please provide a valid phone.
                     .col-md-6
                         label(for="role").form-label Role
-                        select#validationCustom04.form-select(name="roleId", required)
-                            each employeeRole in employeeRoles
-                                option(value=employeeRole.id) #{employeeRole.name}
+                        select#roleId.form-select(name="roleId", required)
+                           each role in roles
+                                option(value=role.value) #{role.label}
                         .invalid-feedback Please select a valid role.
                     .col-md-6
-                        label(for="status").form-label status
-                        select#validationCustom04.form-select(name="status", required)
-                            option(selected disabled value="") Choose status...
-                            option(value=1) Active
-                            option(value=2) Deactive
-                        .invalid-feedback Please select a valid status.                        
+                        label(for="branchId").form-label Role
+                        select#branchId.form-select(name="branchId", required)
+                            each branch in branches
+                                option(value=branch.value) #{branch.label}
+                        .invalid-feedback Please select a valid role.                      
                     .col-12
                         button.btn.btn-primary(type="submit") Submit form
 
@@ -98,7 +96,7 @@ block content
                 { data: 'email' },
                 { data: 'phone' },
                 { data: 'roleId' },
-                { data: 'status' },
+                { data: 'branchId' },
                 {
                     data: 'id', 
                     render: function(data, type, row) {

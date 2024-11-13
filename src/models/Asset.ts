@@ -2,6 +2,7 @@ import { Table, Column, Model, DataType, ForeignKey, BelongsTo, HasMany } from '
 import { AssetType } from "./AssetType";
 import { AssetCategory } from "./AssetCategory";
 import { AssetTransaction } from './AssetTransaction';
+import { AssetStatus } from './AssetStatus';
 
 
 interface AssetAttributes {
@@ -36,11 +37,10 @@ export class Asset extends Model<Asset, AssetAttributes> {
   serialNumber!: string;
 
   @Column({
-    type: DataType.STRING,
-    unique: true,
+    type: DataType.STRING, // Changed from DataType.INTEGER to DataType.STRING
     allowNull: false
   })
-  model!: number;
+  model!: string; // Changed from number to string
 
   @ForeignKey(() => AssetType) 
   @Column({
@@ -56,18 +56,22 @@ export class Asset extends Model<Asset, AssetAttributes> {
   })
   categoryId!: number;
 
+  @ForeignKey(() => AssetStatus) 
   @Column({
-    type: DataType.SMALLINT,
+    type: DataType.INTEGER,
     allowNull: false,
   })
-  status!: number;
+  statusId!: number;
 
   @Column({
     type: DataType.SMALLINT,
     allowNull: true,
   })
-  isDeleted!: number;
+  isDeleted!: number | null;
 
+
+  @BelongsTo(() => AssetStatus) 
+  assetStatus!: AssetStatus;
 
   @BelongsTo(() => AssetType) 
   assetType!: AssetType;

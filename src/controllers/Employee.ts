@@ -7,6 +7,8 @@ import Validator from "@src/validator/Validator";
 import { employeeValidationSchema } from "@src/validator/schema";
 import { Op, where } from "sequelize";
 import { EmployeeRole as EmployeeRoleModel } from "@src/models/EmployeeRole";
+import EmployeeBranch from "./EmployeeBranch";
+import EmployeeRole from "./EmployeeRole";
 
 
 
@@ -14,12 +16,12 @@ export default class Employee {
   public static async render(req: Request, res: Response) {
 
 
-    const employeeRoles = await EmployeeRoleModel.findAll({
-      where: {
-        isDeleted: null, 
-      },
-    });
+    const roles = await EmployeeRole.fetch()
+    const branches = await EmployeeBranch.fetch()
+
+    console.log(branches);
     
+
     let data;
     let id = Utils.convertTONumber(req.params.id);
     if (Utils.isGraterthenZero(id)) {
@@ -32,7 +34,8 @@ export default class Employee {
 
     return res.status(200).render('employee', {
       data,
-      employeeRoles
+      roles,
+      branches
     });
   }
 
@@ -41,7 +44,7 @@ export default class Employee {
       name: String(body.name),
       email: String(body.email),
       phone: Number(body.phone),
-      status: Number(body.status),
+      branchId: Number(body.branchId),
       roleId: Number(body.roleId),
     });
   }
@@ -58,7 +61,7 @@ export default class Employee {
         email: args.email,
         phone: args.phone,
         roleId: args.roleId,
-        status: args.status,
+        branchId: args.branchId,
         createdAt: new Date().toISOString(),
       });
 
@@ -156,7 +159,7 @@ export default class Employee {
     }
   }
 
-  public static async fetch(req: Request, res: Response) {
+  public static async getEmployees(req: Request, res: Response) {
 
     try {
 
@@ -195,6 +198,29 @@ export default class Employee {
 
     } catch (error) {
     }
+  }
+
+  public static async fetch(args: any = {}) {
+    const search = args?.search || '';
+
+    const assetCategories = await EmployeeModel.findAll({
+      attributes: [
+        ['id', 'value'],
+        ['name', 'label']
+      ],
+      where: {
+        isDeleted: {
+          [Op.is]: null
+        },
+        [Op.or]: [
+          { name: { [Op.like]: `%${search}%` } },
+        ]
+      },
+      raw: true
+    });
+   
+    return   assetCategories;
+
   }
 
 }

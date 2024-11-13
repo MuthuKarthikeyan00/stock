@@ -139,7 +139,7 @@ export default class AssetType {
     }
   }
 
-  public static async fetch(req: Request, res: Response) {
+  public static async getAssetType(req: Request, res: Response) {
 
     try{
 
@@ -181,6 +181,29 @@ export default class AssetType {
     }catch(error){
 
     }
+
+  }
+
+  public static async fetch(args: any = {}) {
+    const search = args?.search || '';
+
+    const assetCategories = await AssetTypeModel.findAll({
+      attributes: [
+        ['id', 'value'],
+        ['name', 'label']
+      ],
+      where: {
+        isDeleted: {
+          [Op.is]: null
+        },
+        [Op.or]: [
+          { name: { [Op.like]: `%${search}%` } },
+        ]
+      },
+      raw: true
+    });
+   
+    return   assetCategories;
 
   }
 

@@ -11,14 +11,14 @@ block content
                     .col-md-6
                         label(for="assetId").form-label Asset
                         select#assetId.form-select(name="assetId", required)
-                            each employeeRole in employeeRoles
-                                option(value=employeeRole.id) #{employeeRole.name}
-                        .invalid-feedback Please select a valid role.
+                            each asset in assets
+                                option(value=asset.value) #{asset.label}
+                        .invalid-feedback Please select a valid asset.
                     .col-md-6
                         label(for="employeeId").form-label employee
                         select#employeeId.form-select(name="employeeId", required)
-                            each employeeRole in employeeRoles
-                                option(value=employeeRole.id) #{employeeRole.name}
+                            each employee in employees
+                                option(value=employee.id) #{employee.name}
                         .invalid-feedback Please select a valid employee.                        
                     .col-12
                         button.btn.btn-primary(type="submit") Submit form

@@ -5,22 +5,25 @@ import { Request, Response } from "express";
 import ResponseHandler from "../helpers/ResponseHandler";
 import Validator from "@src/validator/Validator";
 import { Employee as EmployeeModel } from "@src/models/Employee";
-import { EmployeeRole as EmployeeRoleModel } from "@src/models/EmployeeRole";
 import { Op } from "sequelize";
 import { AssetCategory } from "@src/models/AssetCategory";
 import { AssetType } from "@src/models/AssetType";
+import Asset from "./Asset";
 
 
 
 
 export default class AssetTransaction {
 
+
   public static async IssueRender(req: Request, res: Response) {
-    const employeeRoles = await EmployeeRoleModel.findAll({
+    const employees = await EmployeeModel.findAll({
       where: {
         isDeleted: null, 
       },
     });
+
+    const assets = await Asset.fetch();
     
     let data;
     let id = Utils.convertTONumber(req.params.id);
@@ -34,7 +37,8 @@ export default class AssetTransaction {
 
     return res.status(200).render('assetIssue', {
       data,
-      employeeRoles
+      employees,
+      assets
     });
 
   }

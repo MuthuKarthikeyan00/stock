@@ -36,9 +36,15 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      status: {
-        type: Sequelize.SMALLINT,
-        allowNull: true
+      branchId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'employee_branches',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
       isDeleted: {
         type: Sequelize.SMALLINT,

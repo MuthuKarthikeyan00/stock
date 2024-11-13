@@ -6,6 +6,8 @@ import AssetCategory from './controllers/AssetCategory';
 import Asset from './controllers/Asset';
 import AssetType from './controllers/AssetType';
 import AssetTransaction from './controllers/AssetTransacton';
+import AssetStatus from './controllers/AssetStatus';
+import EmployeeBranch from './controllers/EmployeeBranch';
 
 export default class Routers {
     private static router = Router();
@@ -18,38 +20,54 @@ export default class Routers {
 
         this.router.get('/employee',Employee.render);
         this.router.get('/employee/:id',Employee.render);
-        this.router.post('/getEmployee',Employee.fetch);
+        this.router.post('/getEmployee',Employee.getEmployees);
         this.router.post('/employee',Employee.create);
         this.router.post('/employee/:id',Employee.update);
         this.router.get('/employeeDelete/:id',Employee.delete);
 
         this.router.get('/employeeRole',EmployeeRole.render);
         this.router.get('/employeeRole/:id',EmployeeRole.render);
-        this.router.post('/getEmployeeRole',EmployeeRole.fetch);
+        this.router.post('/getEmployeeRole',EmployeeRole.getEmployeeRole);
         this.router.post('/employeeRole',EmployeeRole.create);
         this.router.post('/employeeRole/:id',EmployeeRole.update);
         this.router.get('/employeeRoleDelete/:id',EmployeeRole.delete);
 
         this.router.get('/asset',Asset.render);
         this.router.get('/asset/:id',Asset.render);
-        this.router.post('/getAsset',Asset.fetch);
+        this.router.post('/getAsset',Asset.getAssets);
         this.router.post('/asset',Asset.create);
         this.router.post('/asset/:id',Asset.update);
         this.router.get('/assetDelete/:id',Asset.delete);
 
         this.router.get('/assetCategory',AssetCategory.render);
         this.router.get('/assetCategory/:id',AssetCategory.render);
-        this.router.post('/getAssetCategory',AssetCategory.fetch);
+        this.router.post('/getAssetCategory',AssetCategory.getAssetCategories);
         this.router.post('/assetCategory',AssetCategory.create);
         this.router.post('/assetCategory/:id',AssetCategory.update);
         this.router.get('/assetCategoryDelete/:id',AssetCategory.delete);
 
         this.router.get('/assetType',AssetType.render);
         this.router.get('/assetType/:id',AssetType.render);
-        this.router.post('/getAssetType',AssetType.fetch);
+        this.router.post('/getAssetType',AssetType.getAssetType);
         this.router.post('/assetType',AssetType.create);
         this.router.post('/assetType/:id',AssetType.update);
         this.router.get('/assetTypeDelete/:id',AssetType.delete);
+
+
+        this.router.get('/assetStatus',AssetStatus.render);
+        this.router.get('/assetStatus/:id',AssetStatus.render);
+        this.router.post('/getAssetStatus',AssetStatus.getAssetStatus);
+        this.router.post('/assetStatus',AssetStatus.create);
+        this.router.post('/assetStatus/:id',AssetStatus.update);
+        this.router.get('/assetStatusDelete/:id',AssetStatus.delete);
+
+
+        this.router.get('/employeeBranch',EmployeeBranch.render);
+        this.router.get('/employeeBranch/:id',EmployeeBranch.render);
+        this.router.post('/getEmployeeBranch',EmployeeBranch.getEmployeeBranch);
+        this.router.post('/employeeBranch',EmployeeBranch.create);
+        this.router.post('/employeeBranch/:id',EmployeeBranch.update);
+        this.router.get('/employeeBranchDelete/:id',EmployeeBranch.delete);
 
         this.router.get('/assetIssue',AssetTransaction.IssueRender);
         this.router.get('/assetReturn',AssetTransaction.returnRender);
