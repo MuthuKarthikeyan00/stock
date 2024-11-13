@@ -21,6 +21,12 @@ export const employeeRoleValidationSchema = z.object({
   name: z.string().min(1).max(255),
 });
 
+export const AssetTransactionValidationSchema = z.object({
+  assetId: z.number().positive().min(1),
+  employeeId: z.number().positive().min(1),
+  transactionType: z.number().positive().min(1),
+  reason: z.string().min(1).max(255).nullable(),
+});
 
 
 

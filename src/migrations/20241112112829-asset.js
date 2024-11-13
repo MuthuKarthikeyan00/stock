@@ -46,6 +46,16 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
+      employeeId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'employees',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
       statusId: {
         type: Sequelize.INTEGER,
         allowNull: false,

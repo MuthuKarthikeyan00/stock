@@ -32,7 +32,7 @@ module.exports = {
         onDelete: 'CASCADE',
       },
       reason: {
-        type: Sequelize.SMALLINT,
+        type: Sequelize.STRING,
         allowNull: true
       },
       transactionType: {
@@ -44,6 +44,8 @@ module.exports = {
         defaultValue: Sequelize.NOW,
         allowNull: false
       }
+    }, {
+      timestamps: false 
     });
   },
 

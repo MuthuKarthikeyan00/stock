@@ -206,6 +206,7 @@ export default class Asset {
 
   public static async fetch(args: any = {}) {
     const search = args?.search || '';
+    const statusIds = args?.statusIds || [1, 2, 3, 4] ;
 
     const assetCategories = await AssetModel.findAll({
       attributes: [
@@ -220,7 +221,10 @@ export default class Asset {
           { serialNumber: { [Op.like]: `%${search}%` } },
           { name: { [Op.like]: `%${search}%` } },
           { model: { [Op.like]: `%${search}%` } },
-        ]
+        ],
+        statusId: {
+          [Op.in]: statusIds 
+        }
       },
       raw: true
     });

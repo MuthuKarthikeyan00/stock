@@ -9,7 +9,7 @@ block content
             .tab-pane.fade.show.active#add(role="tabpanel")
                 form.row.g-3.needs-validation(action="/assetTransaction" method="post" enctype="multipart/form-data" novalidate)
                     .col-md-6
-                        input#transactionType.form-control(type="number", name="transactionType",hidden=true, value=2, required)
+                        input#transactionType.form-control(type="number", name="transactionType",hidden=true, value=3, required)
                         label(for="assetId").form-label Asset
                         select#assetId.form-select(name="assetId", required)
                             each asset in assets
@@ -20,7 +20,11 @@ block content
                         select#employeeId.form-select(name="employeeId", required)
                             each employee in employees
                                 option(value=employee.value) #{employee.label}
-                        .invalid-feedback Please select a valid employee.                        
+                        .invalid-feedback Please select a valid employee. 
+                    .col-md-6
+                        label(for="reason").form-label Reason
+                        input#reason.form-control(type="text", name="reason", value="", required)
+                        .valid-feedback Looks good!                                               
                     .col-12
                         button.btn.btn-primary(type="submit") Submit form
 

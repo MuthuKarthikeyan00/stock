@@ -3,6 +3,7 @@ import { AssetType } from "./AssetType";
 import { AssetCategory } from "./AssetCategory";
 import { AssetTransaction } from './AssetTransaction';
 import { AssetStatus } from './AssetStatus';
+import { Employee } from './Employee';
 
 
 interface AssetAttributes {
@@ -11,8 +12,9 @@ interface AssetAttributes {
   serialNumber: string;
   model: string;
   statusId: number;
-  typeId: number; // New field
-  categoryId: number; // New field
+  typeId: number;
+  categoryId: number; 
+  employeeId?: number;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -37,10 +39,10 @@ export class Asset extends Model<Asset, AssetAttributes> {
   serialNumber!: string;
 
   @Column({
-    type: DataType.STRING, // Changed from DataType.INTEGER to DataType.STRING
+    type: DataType.STRING, 
     allowNull: false
   })
-  model!: string; // Changed from number to string
+  model!: string; 
 
   @ForeignKey(() => AssetType) 
   @Column({
@@ -63,6 +65,13 @@ export class Asset extends Model<Asset, AssetAttributes> {
   })
   statusId!: number;
 
+  @ForeignKey(() => Employee) 
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+  })
+  employeeId!: number;
+
   @Column({
     type: DataType.SMALLINT,
     allowNull: true,
@@ -78,6 +87,10 @@ export class Asset extends Model<Asset, AssetAttributes> {
 
   @BelongsTo(() => AssetCategory) 
   assetCategory!: AssetCategory;
+
+
+  @BelongsTo(() => Employee) 
+  employee!: Employee;
 
   @HasMany(() => AssetTransaction)
   assetTransactions!: AssetTransaction[];

@@ -5,7 +5,7 @@ import { Employee } from './Employee';
 
 interface AssetTransactionAttributes {
   id?: number; 
-  reason: number;
+  reason: string | null;
   transactionType: number;
   employeeId: number; // New field
   assetId: number; // New field
@@ -38,10 +38,16 @@ export class AssetTransaction extends Model<AssetTransaction , AssetTransactionA
   transactionType!: number;
 
   @Column({
-    type: DataType.SMALLINT,
+    type: DataType.STRING,
+    allowNull: true,
+  })
+  reason!: string | null;
+
+  @Column({
+    type: DataType.DATE,
     allowNull: false,
   })
-  reason!: number;
+  createdAt!: Date;
 
   @BelongsTo(() => Asset) 
   asset!: Asset;

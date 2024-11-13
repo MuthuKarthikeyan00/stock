@@ -73,6 +73,8 @@ export default class Routers {
         this.router.get('/assetReturn',AssetTransaction.returnRender);
         this.router.get('/assetScrap',AssetTransaction.scrapRender);
 
+        this.router.post('/assetTransaction',AssetTransaction.create);
+
 
 
         this.router.get('/', (req: Request, res: Response) => {
