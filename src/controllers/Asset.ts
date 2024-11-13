@@ -231,13 +231,16 @@ export default class Asset {
       include: [
         {
           model: Employee,
-          attributes: [['name', 'Name']],
+          attributes: [ ['name', 'employeeName']],
           required: true 
         }
       ],
       raw: true
     });
-   
+
+console.log(assetCategories);
+
+  
     return assetCategories;
   }
   
