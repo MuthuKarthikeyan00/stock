@@ -26,28 +26,19 @@ block content
                         select#categoryId.form-select(name="categoryId", required)
                             each assetCategory  in assetCategories
                                 if assetCategory.id == data.categoryId  
-                                   option(value=assetCategory.id) #{assetCategory.label}
+                                   option(value=assetCategory.value) #{assetCategory.label}
                                 else  
-                                   option(value=assetCategory.id) #{assetCategory.label}                                   
+                                   option(value=assetCategory.value) #{assetCategory.label}                                   
                         .invalid-feedback Please select a valid category.
                     .col-md-6
                         label(for="typeId").form-label Type
-                        select#validattypeIdionCustom04.form-select(name="typeId", required)
+                        select#typeId.form-select(name="typeId", required)
                             each assetType in assetTypes
                                 if assetType.value == data.typeId  
                                    option(value=assetType.value) #{assetType.label}
                                 else  
                                    option(value=assetType.value) #{assetType.label}                                   
-                        .invalid-feedback Please select a valid Type.    
-                    .col-md-6
-                        label(for="statusId").form-label Type
-                        select#validattypeIdionCustom04.form-select(name="statusId", required)
-                            each assetStatus in assetStatuses
-                                if assetStatus.value == data.statusId  
-                                   option(value=assetStatus.value) #{assetStatus.label}
-                                else  
-                                   option(value=assetStatus.value) #{assetStatus.label}                                   
-                        .invalid-feedback Please select a valid status.                      
+                        .invalid-feedback Please select a valid Type.    .                      
                     .col-12
                         button.btn.btn-primary(type="submit") Submit form
     else 
@@ -93,20 +84,7 @@ block content
                         select#typeId.form-select(name="typeId", required)
                             each assetType in assetTypes
                                 option(value=assetType.value) #{assetType.label}
-                        .invalid-feedback Please select a valid Type.                        
-
-                    .col-md-6
-                        label(for="typeId").form-label Status
-                        select#typeId.form-select(name="typeId", required)
-                            each assetStatus in assetStatuses
-                                option(value=assetStatus.value) #{assetStatus.label}
-                        .invalid-feedback Please select a valid Type.                        
-                    .col-md-6
-                        select#validationCustom04.form-select(name="status", required)
-                            option(selected disabled value="") Choose status...
-                            option(value=1) Active
-                            option(value=2) Deactive
-                        .invalid-feedback Please select a valid Status.                        
+                        .invalid-feedback Please select a valid Type.                                             
                     .col-12
                         button.btn.btn-primary(type="submit") Submit form
 
@@ -120,7 +98,7 @@ block content
                 { data: 'model' },
                 { data: 'categoryId' },
                 { data: 'typeId' },
-                { data: 'status' },
+                { data: 'statusId' },
                 {
                     data: 'id', 
                     render: function(data, type, row) {

@@ -10,7 +10,7 @@ interface AssetAttributes {
   name: string;
   serialNumber: string;
   model: string;
-  status: string;
+  statusId: number;
   typeId: number; // New field
   categoryId: number; // New field
   createdAt?: string;

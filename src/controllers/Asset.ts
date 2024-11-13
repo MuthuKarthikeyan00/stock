@@ -8,6 +8,7 @@ import { assetValidationSchema } from "@src/validator/schema";
 import { literal, Op } from "sequelize";
 import  AssetCategory  from "@src/controllers/AssetCategory";
 import  AssetType  from "@src/controllers/AssetType";
+import AssetStatus from "./AssetStatus";
 
 
 
@@ -18,6 +19,7 @@ export default class Asset {
 
     const assetCategories = await AssetCategory.fetch();
     const assetTypes = await AssetType.fetch();
+    const assetStatuses = await AssetStatus.fetch();
     
     let data;
     let id = Utils.convertTONumber(req.params.id);
@@ -32,7 +34,8 @@ export default class Asset {
     return res.status(200).render('asset', {
       data,
       assetCategories,
-      assetTypes
+      assetTypes,
+      assetStatuses
     });
   }
 
@@ -41,7 +44,6 @@ export default class Asset {
       name: String(body.name),
       serialNumber: String(body.serialNumber),
       model: String(body.model),
-      status: Number(body.status),
       typeId: Number(body.typeId),
       categoryId: Number(body.categoryId),
     });
@@ -60,7 +62,7 @@ export default class Asset {
         model: args.model,
         typeId: args.typeId,
         categoryId: args.categoryId,
-        status: args.status,
+        statusId: 1,
         createdAt: new Date().toISOString(),
       });
 
@@ -89,8 +91,11 @@ export default class Asset {
 
 
       const args = await Asset.handleData(body);
+      console.log(args);
+      
       const status = await Validator.validate(args, assetValidationSchema, res)
       args.updatedAt = new Date().toISOString();
+      args.statusId =  1;
 
       const isValid = await AssetModel.findOne({
         where: {
