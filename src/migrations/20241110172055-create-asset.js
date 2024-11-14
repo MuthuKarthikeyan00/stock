@@ -56,7 +56,7 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      statusId: {
+      assetStatusId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -65,6 +65,20 @@ module.exports = {
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
+      },
+      assetTransactionTypeId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'asset_transaction_types',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      amount: {
+        type: Sequelize.DOUBLE,
+        allowNull: true,
       },
       isDeleted: {
         type: Sequelize.SMALLINT,
@@ -85,6 +99,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('employees');
+    await queryInterface.dropTable('assets');
   }
 };

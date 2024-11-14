@@ -5,9 +5,10 @@ import EmployeeRole from './controllers/EmployeeRole';
 import AssetCategory from './controllers/AssetCategory';
 import Asset from './controllers/Asset';
 import AssetType from './controllers/AssetType';
-import AssetTransaction from './controllers/AssetTransacton';
 import AssetStatus from './controllers/AssetStatus';
 import EmployeeBranch from './controllers/EmployeeBranch';
+import AssetLog from './controllers/AssetLog';
+import AssetTransactionType from './controllers/AssetTransactionType';
 
 export default class Routers {
     private static router = Router();
@@ -61,6 +62,14 @@ export default class Routers {
         this.router.post('/assetStatus/:id',AssetStatus.update);
         this.router.get('/assetStatusDelete/:id',AssetStatus.delete);
 
+        this.router.get('/assetTransactionType',AssetTransactionType.render);
+        this.router.get('/assetTransactionType/:id',AssetTransactionType.render);
+        this.router.post('/getAssetTransactionType',AssetTransactionType.getAssetTransactionType);
+        this.router.post('/assetTransactionType',AssetTransactionType.create);
+        this.router.post('/assetTransactionType/:id',AssetTransactionType.update);
+        this.router.get('/assetTransactionType/:id',AssetTransactionType.delete);
+
+        
 
         this.router.get('/employeeBranch',EmployeeBranch.render);
         this.router.get('/employeeBranch/:id',EmployeeBranch.render);
@@ -69,11 +78,11 @@ export default class Routers {
         this.router.post('/employeeBranch/:id',EmployeeBranch.update);
         this.router.get('/employeeBranchDelete/:id',EmployeeBranch.delete);
 
-        this.router.get('/assetIssue',AssetTransaction.IssueRender);
-        this.router.get('/assetReturn',AssetTransaction.returnRender);
-        this.router.get('/assetScrap',AssetTransaction.scrapRender);
+        this.router.get('/assetIssue',AssetLog.IssueRender);
+        this.router.get('/assetReturn',AssetLog.returnRender);
+        this.router.get('/assetScrap',AssetLog.scrapRender);
 
-        this.router.post('/assetTransaction',AssetTransaction.create);
+        this.router.post('/assetLog',AssetLog.create);
 
 
 

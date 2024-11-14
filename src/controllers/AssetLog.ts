@@ -4,20 +4,15 @@ import { Asset as AssetModel } from "@src/models/Asset";
 import { Request, Response } from "express";
 import ResponseHandler from "../helpers/ResponseHandler";
 import Validator from "@src/validator/Validator";
-import { Employee as EmployeeModel } from "@src/models/Employee";
-import { AssetTransaction as AssetTransactionModel } from "@src/models/AssetTransaction";
-import { Op } from "sequelize";
-import { AssetCategory } from "@src/models/AssetCategory";
-import { AssetType } from "@src/models/AssetType";
+import { AssetLog as AssetLogModel } from "@src/models/AssetLog";
 import Asset from "./Asset";
-import { number } from "zod";
-import { AssetTransactionValidationSchema } from "@src/validator/schema";
+import { AssetLogValidationSchema } from "@src/validator/schema";
 import Employee from "./Employee";
 
 
 
 
-export default class AssetTransaction {
+export default class AssetLog {
 
 
   public static async IssueRender(req: Request, res: Response) {
@@ -34,11 +29,9 @@ export default class AssetTransaction {
 
   public static async returnRender(req: Request, res: Response) {
 
-    const employees = await Employee.fetch();
     const assets = await Asset.fetch({statusIds: [2]});
     
     return res.status(200).render('assetReturn', {
-      employees,
       assets
     });
 
@@ -70,10 +63,10 @@ export default class AssetTransaction {
 
     try {
       const body = req.body;
-      const args = await AssetTransaction.handleData(body);
-      const status = await Validator.validate(args, AssetTransactionValidationSchema, res)
+      const args = await AssetLog.handleData(body);
+      const status = await Validator.validate(args, AssetLogValidationSchema, res)
 
-      const data = await AssetTransactionModel.create(args);
+      const data = await AssetLogModel.create(args);
       
       if (Utils.isGraterthenZero(data.id)){
 

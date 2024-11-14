@@ -1,9 +1,10 @@
 import { Table, Column, Model, DataType, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
 import { AssetType } from "./AssetType";
 import { AssetCategory } from "./AssetCategory";
-import { AssetTransaction } from './AssetTransaction';
+import { AssetLog } from './AssetLog';
 import { AssetStatus } from './AssetStatus';
 import { Employee } from './Employee';
+import { AssetTransactionType } from './AssetTransactionType';
 
 
 interface AssetAttributes {
@@ -63,7 +64,7 @@ export class Asset extends Model<Asset, AssetAttributes> {
     type: DataType.INTEGER,
     allowNull: false,
   })
-  statusId!: number;
+  AssetStatusId!: number;
 
   @ForeignKey(() => Employee) 
   @Column({
@@ -78,6 +79,19 @@ export class Asset extends Model<Asset, AssetAttributes> {
   })
   isDeleted!: number | null;
 
+  @ForeignKey(() => AssetTransactionType) 
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: true,
+  })
+  assetTransactionTypeId!: number;
+
+  @Column({
+    type: DataType.DOUBLE,
+    allowNull: true,
+  })
+  amount!: number;
+
 
   @BelongsTo(() => AssetStatus) 
   assetStatus!: AssetStatus;
@@ -88,10 +102,13 @@ export class Asset extends Model<Asset, AssetAttributes> {
   @BelongsTo(() => AssetCategory) 
   assetCategory!: AssetCategory;
 
+  @BelongsTo(() => AssetTransactionType) 
+  assetTransactionType!: AssetTransactionType;
+
 
   @BelongsTo(() => Employee) 
   employee!: Employee;
 
-  @HasMany(() => AssetTransaction)
-  assetTransactions!: AssetTransaction[];
+  @HasMany(() => AssetLog)
+  assetLogs!: AssetLog[];
 }

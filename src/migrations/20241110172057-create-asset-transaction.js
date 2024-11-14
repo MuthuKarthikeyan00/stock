@@ -23,7 +23,7 @@ module.exports = {
       },
       employeeId: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true,
         references: {
           model: 'employees',
           key: 'id',
@@ -31,13 +31,29 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
-      reason: {
-        type: Sequelize.STRING,
-        allowNull: true
+      assetStatusId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'asset_statuses',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
       },
-      transactionType: {
-        type: Sequelize.SMALLINT,
-        allowNull: true
+      assetTransactionTypeId: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'asset_transaction_types',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      amount: {
+        type: Sequelize.DOUBLE,
+        allowNull: true,
       },
       createdAt: {
         type: Sequelize.DATE,

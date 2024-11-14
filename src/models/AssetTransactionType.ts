@@ -1,19 +1,20 @@
 import { Table, Column, Model, DataType, HasMany } from 'sequelize-typescript';
-import { Asset } from './Asset';
+import { AssetLog } from './AssetLog';
 import { AssetTransaction } from './AssetTransaction';
 
 
-interface AssetStatusAttributes {
-  id?: number;  
+// The interface for the model attributes
+interface AssetTransactionTypeAttributes {
+  id?: number;  // Optional id because it's auto-incremented
   name: string;
   isDeleted?: number | null;
   createdAt?: string;
   updatedAt?: string;
 }@Table({
-  tableName: 'asset_statuses', 
+  tableName: 'asset_transaction_types',  // Ensure this matches the table name in migration
   timestamps: false,
 })
-export class AssetStatus extends Model<AssetStatus,AssetStatusAttributes> {
+export class AssetTransactionType extends Model<AssetTransactionType,AssetTransactionTypeAttributes> {
   @Column({
     type: DataType.INTEGER,
     primaryKey: true,
@@ -45,8 +46,8 @@ export class AssetStatus extends Model<AssetStatus,AssetStatusAttributes> {
   })
   updatedAt!: Date;
 
-  @HasMany(() => Asset)
-  assets!: Asset[];
+  @HasMany(() => AssetLog)
+  assetLogs!: AssetLog[];
 
   @HasMany(() => AssetTransaction)
   assetTransactions!: AssetTransaction[];

@@ -4,7 +4,7 @@ import { EmployeeRole } from '@src/models/EmployeeRole';
 import { AssetType } from '@src/models/AssetType';
 import { Asset } from '@src/models/Asset';
 import { AssetCategory } from '@src/models/AssetCategory';
-import { AssetTransaction } from '@src/models/AssetTransaction';
+import { AssetLog } from '@src/models/AssetLog';
 import { EmployeeBranch } from '@src/models/EmployeeBranch';
 import { AssetStatus } from '@src/models/AssetStatus';
 
@@ -14,7 +14,7 @@ const sequelize = new Sequelize({
   username: 'admin',
   password: 'admin',
   database: 'stock',
-  models: [Asset, AssetType, AssetCategory,AssetStatus,AssetTransaction,Employee,EmployeeRole,EmployeeBranch],  // Add your models here
+  models: [Asset, AssetType, AssetCategory,AssetStatus,AssetLog,Employee,EmployeeRole,EmployeeBranch],  // Add your models here
 });
 
 export default sequelize;

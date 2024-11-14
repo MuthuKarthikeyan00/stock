@@ -1,23 +1,24 @@
-import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
-import { Asset } from "./Asset";
+import { Table, Column, Model, DataType, HasMany, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { AssetLog } from './AssetLog';
 import { Employee } from './Employee';
+import { AssetStatus } from './AssetStatus';
+import { AssetTransactionType } from './AssetTransactionType';
+import { Asset } from './Asset';
 
 
+// The interface for the model attributes
 interface AssetTransactionAttributes {
-  id?: number; 
-  reason: string | null;
-  transactionType: number;
-  employeeId: number; // New field
-  assetId: number; // New field
+  id?: number;  // Optional id because it's auto-incremented
+  name: string;
+  isDeleted?: number | null;
   createdAt?: string;
-}
-
-@Table({
-  tableName: 'assets_transactions',
-  timestamps: true
+  updatedAt?: string;
+}@Table({
+  tableName: 'asset_transactions',  // Ensure this matches the table name in migration
+  timestamps: false,
 })
-export class AssetTransaction extends Model<AssetTransaction , AssetTransactionAttributes> {
-  @ForeignKey(() => Asset) 
+export class AssetTransaction extends Model<AssetTransaction,AssetTransactionAttributes> {
+  @ForeignKey(() => AssetTransaction) 
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
@@ -31,17 +32,26 @@ export class AssetTransaction extends Model<AssetTransaction , AssetTransactionA
   })
   employeeId!: number;
 
+  @ForeignKey(() => AssetStatus) 
   @Column({
-    type: DataType.SMALLINT,
-    allowNull: false,
-  })
-  transactionType!: number;
-
-  @Column({
-    type: DataType.STRING,
+    type: DataType.INTEGER,
     allowNull: true,
   })
-  reason!: string | null;
+  assetStatusId!: number;
+
+  @ForeignKey(() => AssetTransactionType) 
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  assetTransactionTypeId!: number;
+
+
+  @Column({
+    type: DataType.DOUBLE,
+    allowNull: true,
+  })
+  amount!: number;
 
   @Column({
     type: DataType.DATE,
@@ -52,6 +62,12 @@ export class AssetTransaction extends Model<AssetTransaction , AssetTransactionA
   @BelongsTo(() => Asset) 
   asset!: Asset;
 
+  @BelongsTo(() => AssetStatus) 
+  assetStatus!: AssetStatus;
+
   @BelongsTo(() => Employee) 
   employee!: Employee;
+
+  @BelongsTo(() => AssetTransactionType) 
+  AssetTransactionType!: AssetTransactionType;
 }
