@@ -1,6 +1,7 @@
 import { Table, Column, Model, DataType, HasMany } from 'sequelize-typescript';
 import { AssetLog } from './AssetLog';
 import { AssetTransaction } from './AssetTransaction';
+import { Asset } from './Asset';
 
 
 // The interface for the model attributes
@@ -45,6 +46,9 @@ export class AssetTransactionType extends Model<AssetTransactionType,AssetTransa
     allowNull: true,
   })
   updatedAt!: Date;
+
+  @HasMany(() => Asset)
+  assets!: Asset[];
 
   @HasMany(() => AssetLog)
   assetLogs!: AssetLog[];

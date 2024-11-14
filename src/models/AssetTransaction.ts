@@ -1,24 +1,27 @@
-import { Table, Column, Model, DataType, HasMany, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import { AssetLog } from './AssetLog';
 import { Employee } from './Employee';
 import { AssetStatus } from './AssetStatus';
 import { AssetTransactionType } from './AssetTransactionType';
 import { Asset } from './Asset';
 
-
 // The interface for the model attributes
 interface AssetTransactionAttributes {
-  id?: number;  // Optional id because it's auto-incremented
-  name: string;
-  isDeleted?: number | null;
+  id?: number; 
+  assetTransactionTypeId: number;
+  assetStatusId?: number;
+  employeeId?: number; 
+  assetId: number; 
+  amount: number;
   createdAt?: string;
-  updatedAt?: string;
-}@Table({
+}
+
+@Table({
   tableName: 'asset_transactions',  // Ensure this matches the table name in migration
   timestamps: false,
 })
-export class AssetTransaction extends Model<AssetTransaction,AssetTransactionAttributes> {
-  @ForeignKey(() => AssetTransaction) 
+export class AssetTransaction extends Model<AssetTransaction, AssetTransactionAttributes> {
+  @ForeignKey(() => Asset) 
   @Column({
     type: DataType.INTEGER,
     allowNull: false,
@@ -28,7 +31,7 @@ export class AssetTransaction extends Model<AssetTransaction,AssetTransactionAtt
   @ForeignKey(() => Employee) 
   @Column({
     type: DataType.INTEGER,
-    allowNull: false,
+    allowNull: true,
   })
   employeeId!: number;
 
@@ -45,7 +48,6 @@ export class AssetTransaction extends Model<AssetTransaction,AssetTransactionAtt
     allowNull: false,
   })
   assetTransactionTypeId!: number;
-
 
   @Column({
     type: DataType.DOUBLE,
@@ -69,5 +71,5 @@ export class AssetTransaction extends Model<AssetTransaction,AssetTransactionAtt
   employee!: Employee;
 
   @BelongsTo(() => AssetTransactionType) 
-  AssetTransactionType!: AssetTransactionType;
+  assetTransactionType!: AssetTransactionType;
 }

@@ -7,9 +7,9 @@ block content
 
         .tab-content.p-4
             .tab-pane.fade.show.active#add(role="tabpanel")
-                form.row.g-3.needs-validation(action="/assetTransaction" method="post" enctype="multipart/form-data" novalidate)
+                form.row.g-3.needs-validation(action="/assetLog" method="post" enctype="multipart/form-data" novalidate)
                     .col-md-6
-                        input#transactionType.form-control(type="number", name="transactionType",hidden=true, value=2, required)
+                        input#assetStatusId.form-control(type="number", name="assetStatusId",hidden=true, value=2, required)
                         label(for="assetId").form-label Asset
                         select#assetId.form-select(name="assetId", required)
                             each asset in assets

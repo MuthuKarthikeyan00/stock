@@ -43,7 +43,7 @@ module.exports = {
       },
       assetTransactionTypeId: {
         type: Sequelize.INTEGER,
-        allowNull: true,
+        allowNull: false,
         references: {
           model: 'asset_transaction_types',
           key: 'id',

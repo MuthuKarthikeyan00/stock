@@ -5,17 +5,19 @@ import { AssetLog } from './AssetLog';
 import { AssetStatus } from './AssetStatus';
 import { Employee } from './Employee';
 import { AssetTransactionType } from './AssetTransactionType';
-
+import { AssetTransaction } from './AssetTransaction';
 
 interface AssetAttributes {
   id?: number; 
   name: string;
   serialNumber: string;
   model: string;
-  statusId: number;
+  assetStatusId: number;
+  assetTransactionTypeId: number;
+  amount: number;
   typeId: number;
   categoryId: number; 
-  employeeId?: number;
+  employeeId?: number | null;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -64,14 +66,14 @@ export class Asset extends Model<Asset, AssetAttributes> {
     type: DataType.INTEGER,
     allowNull: false,
   })
-  AssetStatusId!: number;
+  assetStatusId!: number;
 
   @ForeignKey(() => Employee) 
   @Column({
     type: DataType.INTEGER,
     allowNull: true,
   })
-  employeeId!: number;
+  employeeId!: number | null;
 
   @Column({
     type: DataType.SMALLINT,
@@ -92,7 +94,6 @@ export class Asset extends Model<Asset, AssetAttributes> {
   })
   amount!: number;
 
-
   @BelongsTo(() => AssetStatus) 
   assetStatus!: AssetStatus;
 
@@ -104,11 +105,13 @@ export class Asset extends Model<Asset, AssetAttributes> {
 
   @BelongsTo(() => AssetTransactionType) 
   assetTransactionType!: AssetTransactionType;
-
-
+  
   @BelongsTo(() => Employee) 
   employee!: Employee;
 
   @HasMany(() => AssetLog)
   assetLogs!: AssetLog[];
+
+  @HasMany(() => AssetTransaction)
+  assetTransactions!: AssetTransaction[];
 }

@@ -15,6 +15,7 @@ export const assetValidationSchema = z.object({
   serialNumber:z.string().min(1).max(255),
   typeId: z.number().positive().min(1),
   categoryId: z.number().positive().min(1),
+  amount: z.number().positive().min(1),
 });
 
 export const employeeRoleValidationSchema = z.object({
@@ -23,9 +24,10 @@ export const employeeRoleValidationSchema = z.object({
 
 export const AssetLogValidationSchema = z.object({
   assetId: z.number().positive().min(1),
+  assetTransactionTypeId: z.number().positive().min(1).nullable(),
   employeeId: z.number().positive().min(1),
-  transactionType: z.number().positive().min(1),
-  reason: z.string().min(1).max(255).nullable(),
+  assetStatusId: z.number().positive().min(1),
+  amount: z.number().positive().min(1).nullable(),
 });
 
 

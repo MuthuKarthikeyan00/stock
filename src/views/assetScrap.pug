@@ -7,20 +7,14 @@ block content
 
         .tab-content.p-4
             .tab-pane.fade.show.active#add(role="tabpanel")
-                form.row.g-3.needs-validation(action="/assetTransaction" method="post" enctype="multipart/form-data" novalidate)
+                form.row.g-3.needs-validation(action="/assetLog" method="post" enctype="multipart/form-data" novalidate)
                     .col-md-6
-                        input#transactionType.form-control(type="number", name="transactionType",hidden=true, value=4, required)
+                        input#assetStatusId.form-control(type="number", name="assetStatusId",hidden=true, value=4, required)
                         label(for="assetId").form-label Asset
                         select#assetId.form-select(name="assetId", required)
                             each asset in assets
                                 option(value=asset.value) #{asset.label}
-                        .invalid-feedback Please select a valid asset.
-                    .col-md-6
-                        label(for="employeeId").form-label employee
-                        select#employeeId.form-select(name="employeeId", required)
-                            each employee in employees
-                                option(value=employee.value) #{employee.label}
-                        .invalid-feedback Please select a valid employee.                        
+                        .invalid-feedback Please select a valid asset.                       
                     .col-12
                         button.btn.btn-primary(type="submit") Submit form
 

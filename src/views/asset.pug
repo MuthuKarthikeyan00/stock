@@ -22,6 +22,10 @@ block content
                         input#model.form-control(type="text", name="model", value=data.model, required)
                         .invalid-feedback Please provide a valid Model.
                     .col-md-6
+                        label(for="amount").form-label Amount
+                        input#amount.form-control(type="number", name="amount", value=data.amount, required)
+                        .valid-feedback Looks good! 
+                    .col-md-6
                         label(for="categoryId").form-label category
                         select#categoryId.form-select(name="categoryId", required)
                             each assetCategory  in assetCategories
@@ -58,6 +62,8 @@ block content
                             th Category
                             th Type
                             th Status
+                            th Amount
+                            th actions
                     tbody
             .tab-pane.fade#add(role="tabpanel")
                 form.row.g-3.needs-validation(action="/asset" method="post" enctype="multipart/form-data" novalidate)
@@ -73,6 +79,10 @@ block content
                         label(for="model").form-label Model
                         input#model.form-control(type="text", name="model", required)
                         .invalid-feedback Please provide a valid model.
+                    .col-md-6
+                        label(for="amount").form-label Amount
+                        input#amount.form-control(type="number", name="amount", value="", required)
+                        .valid-feedback Looks good!                        
                     .col-md-6
                         label(for="categoryId").form-label Category
                         select#categoryId.form-select(name="categoryId", required)
@@ -98,7 +108,8 @@ block content
                 { data: 'model' },
                 { data: 'categoryId' },
                 { data: 'typeId' },
-                { data: 'statusId' },
+                { data: 'assetStatusId' },
+                { data: 'amount' },
                 {
                     data: 'id', 
                     render: function(data, type, row) {

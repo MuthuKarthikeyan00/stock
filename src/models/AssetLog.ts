@@ -8,8 +8,8 @@ import { AssetStatus } from './AssetStatus';
 
 interface AssetLogAttributes {
   id?: number; 
-  reason: string | null;
-  transactionType: number;
+  assetTransactionTypeId?: number;
+  assetStatusId: number;
   employeeId: number; 
   assetId: number; 
   createdAt?: string;
@@ -17,7 +17,7 @@ interface AssetLogAttributes {
 
 @Table({
   tableName: 'asset_logs',
-  timestamps: true
+  timestamps: false
 })
 export class AssetLog extends Model<AssetLog , AssetLogAttributes> {
   @ForeignKey(() => Asset) 
@@ -39,7 +39,7 @@ export class AssetLog extends Model<AssetLog , AssetLogAttributes> {
     type: DataType.INTEGER,
     allowNull: false,
   })
-  AssetStatusId!: number;
+  assetStatusId!: number;
 
   @ForeignKey(() => AssetTransactionType) 
   @Column({

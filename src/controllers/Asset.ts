@@ -10,6 +10,7 @@ import  AssetCategory  from "@src/controllers/AssetCategory";
 import  AssetType  from "@src/controllers/AssetType";
 import AssetStatus from "./AssetStatus";
 import { Employee } from "@src/models/Employee";
+import { AssetTransaction } from "@src/models/AssetTransaction";
 
 
 
@@ -47,6 +48,7 @@ export default class Asset {
       model: String(body.model),
       typeId: Number(body.typeId),
       categoryId: Number(body.categoryId),
+      amount: Number(body.amount),
     });
   }
 
@@ -56,18 +58,24 @@ export default class Asset {
       const body = req.body;
       const args = await Asset.handleData(body);
       const status = await Validator.validate(args, assetValidationSchema, res)
+      args.craetedAt = new Date().toISOString();
+      args.assetStatusId =  1;
+      args.assetTransactionTypeId =  1;
+      const data = await AssetModel.create(args);
 
-      const data = await AssetModel.create({
-        name: args.name,
-        serialNumber: args.serialNumber,
-        model: args.model,
-        typeId: args.typeId,
-        categoryId: args.categoryId,
-        statusId: 1,
-        createdAt: new Date().toISOString(),
-      });
+      if (Utils.isGraterthenZero(data.id)){
 
-      if (Utils.isGraterthenZero(data.id)) return ResponseHandler.success(res, 201, data);
+        const result = await AssetTransaction.create({
+          assetId: data.id,
+          assetTransactionTypeId: 1,
+          amount: data.amount,
+          assetStatusId: 1,
+          createdAt: new Date().toISOString()
+        })
+
+        if (Utils.isGraterthenZero(result.id)) return ResponseHandler.success(res, 201, data);
+
+      }
       return ResponseHandler.error(res);
 
     } catch (error) {
@@ -185,7 +193,6 @@ export default class Asset {
         }),
       };
 
-
       const data = await AssetModel.findAndCountAll({
         where: whereClause,
         offset: offset,
@@ -207,7 +214,7 @@ export default class Asset {
 
   public static async fetch(args: any = {}) {
     const search = args?.search || '';
-    const statusIds = args?.statusIds || [1, 2, 3, 4];
+    const assetStatusIds = args?.assetStatusIds || [1, 2, 3, 4];
   
     const assets = await AssetModel.findAll({
       attributes: [
@@ -226,15 +233,15 @@ export default class Asset {
           { name: { [Op.like]: `%${search}%` } },
           { model: { [Op.like]: `%${search}%` } },
         ],
-        statusId: {
-          [Op.in]:statusIds
+        assetStatusId: {
+          [Op.in]:assetStatusIds
         }
       },
       include: [
         {
           model: Employee,
           attributes: [ ['name', 'employeeName']],
-          required: true 
+          required: false 
         }
       ],
       raw: true

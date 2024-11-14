@@ -186,6 +186,7 @@ export default class AssetTransactionType {
 
   public static async fetch(args: any = {}) {
     const search = args?.search || '';
+    const assetTransactionIds = args?.assetTransactionIds || [1, 2, 3, 4];
 
     const assetCategories = await AssetTransactionTypeModel.findAll({
       attributes: [
@@ -198,7 +199,10 @@ export default class AssetTransactionType {
         },
         [Op.or]: [
           { name: { [Op.like]: `%${search}%` } },
-        ]
+        ],
+        id: {
+          [Op.in]:assetTransactionIds
+        }
       },
       raw: true
     });
