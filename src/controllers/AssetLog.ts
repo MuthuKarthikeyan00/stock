@@ -60,7 +60,7 @@ export default class AssetLog {
       assetStatusId: Number(body.assetStatusId),
       assetTransactionTypeId : body.assetTransactionTypeId ? Number(body.assetTransactionTypeId) : null,
       amount : body.amount ? Number(body.amount) : null,
-      employeeId: Number(body.employeeId),
+      employeeId: body.employeeId ? Number(body.employeeId) : null,
     });
   }
 

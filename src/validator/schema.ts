@@ -25,7 +25,7 @@ export const employeeRoleValidationSchema = z.object({
 export const AssetLogValidationSchema = z.object({
   assetId: z.number().positive().min(1),
   assetTransactionTypeId: z.number().positive().min(1).nullable(),
-  employeeId: z.number().positive().min(1),
+  employeeId: z.number().positive().min(1).nullable(),
   assetStatusId: z.number().positive().min(1),
   amount: z.number().positive().min(1).nullable(),
 });

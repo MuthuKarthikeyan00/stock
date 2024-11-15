@@ -10,7 +10,7 @@ interface AssetLogAttributes {
   id?: number; 
   assetTransactionTypeId?: number;
   assetStatusId: number;
-  employeeId: number; 
+  employeeId?: number; 
   assetId: number; 
   createdAt?: string;
 }
@@ -30,7 +30,7 @@ export class AssetLog extends Model<AssetLog , AssetLogAttributes> {
   @ForeignKey(() => Employee) 
   @Column({
     type: DataType.INTEGER,
-    allowNull: false,
+    allowNull: true,
   })
   employeeId!: number;
 
