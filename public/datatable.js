@@ -1,4 +1,4 @@
-function initializeDataTable(selector, ajaxUrl, columns) {
+function initializeDataTable(selector, ajaxUrl, columns, args={}) {
     $(document).ready(function() {
         $(selector).DataTable({
             serverSide: true,
@@ -7,6 +7,7 @@ function initializeDataTable(selector, ajaxUrl, columns) {
                 type: 'POST',
                 data: function(d) {
                     return {
+                        args,
                         draw: d.draw,
                         offset: d.start,
                         limit: d.length,
@@ -23,6 +24,15 @@ function initializeDataTable(selector, ajaxUrl, columns) {
             responsive: true,
             paging: true,
             searching: true,
+            // drawCallback: function(settings) {
+            //     var api = this.api();               
+            //     var total = api.column(5).data().reduce(function(a, b) {
+            //          a = a || 0;
+            //          b = b || 0;
+            //         return a + parseFloat(b);
+            //     }, 0);
+            //     $(api.column(5).footer()).html(total.toFixed(2));
+            // },
         });
     });
 }

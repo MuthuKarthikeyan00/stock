@@ -4,7 +4,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('asset_logs', {
+    await queryInterface.createTable('asset_transactions', {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -51,6 +51,10 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE',
       },
+      amount: {
+        type: Sequelize.DOUBLE,
+        allowNull: true,
+      },
       createdAt: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW,
@@ -60,6 +64,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('asset_logs');
+    await queryInterface.dropTable('asset_transactions');
   }
 };

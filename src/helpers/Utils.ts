@@ -68,6 +68,12 @@ export default class Utils {
         return this.isNumber(param) ? Number(param) : 0 ;  
     }
 
+    public static dateFormat(dateString : string) : string {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-GB'); 
+        
+    }
+
     public static  removeNullPrototype(req : Request, res : Response, next :NextFunction) {
         req.body = Object.assign({}, req.body);
         next();

@@ -19,9 +19,6 @@ export default class Employee {
     const roles = await EmployeeRole.fetch()
     const branches = await EmployeeBranch.fetch()
 
-    console.log(branches);
-    
-
     let data;
     let id = Utils.convertTONumber(req.params.id);
     if (Utils.isGraterthenZero(id)) {

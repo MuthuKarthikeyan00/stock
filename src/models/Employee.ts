@@ -1,6 +1,6 @@
 import { Table, Column, Model, DataType, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
 import { EmployeeRole } from "./EmployeeRole";
-import { AssetLog } from './AssetLog';
+import { AssetTransaction } from './AssetTransaction';
 import { EmployeeBranch } from './EmployeeBranch';
 interface EmployeeAttributes {
   id?: number; 
@@ -65,7 +65,7 @@ export class Employee extends Model<Employee,EmployeeAttributes> {
 
   @BelongsTo(() => EmployeeBranch)
   employeeBranch!: EmployeeBranch;
-
-  @HasMany(() => AssetLog)
-  assetLogs!: AssetLog[];
+  
+  @HasMany(() => AssetTransaction)
+  assetTransactions!: AssetTransaction[];
 }

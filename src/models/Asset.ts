@@ -1,7 +1,6 @@
 import { Table, Column, Model, DataType, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
 import { AssetType } from "./AssetType";
 import { AssetCategory } from "./AssetCategory";
-import { AssetLog } from './AssetLog';
 import { AssetStatus } from './AssetStatus';
 import { Employee } from './Employee';
 import { AssetTransactionType } from './AssetTransactionType';
@@ -90,7 +89,7 @@ export class Asset extends Model<Asset, AssetAttributes> {
 
   @Column({
     type: DataType.DOUBLE,
-    allowNull: true,
+    allowNull: false,
   })
   amount!: number;
 
@@ -109,8 +108,6 @@ export class Asset extends Model<Asset, AssetAttributes> {
   @BelongsTo(() => Employee) 
   employee!: Employee;
 
-  @HasMany(() => AssetLog)
-  assetLogs!: AssetLog[];
 
   @HasMany(() => AssetTransaction)
   assetTransactions!: AssetTransaction[];

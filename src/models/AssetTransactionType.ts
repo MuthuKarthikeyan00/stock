@@ -1,5 +1,4 @@
 import { Table, Column, Model, DataType, HasMany } from 'sequelize-typescript';
-import { AssetLog } from './AssetLog';
 import { AssetTransaction } from './AssetTransaction';
 import { Asset } from './Asset';
 
@@ -49,9 +48,6 @@ export class AssetTransactionType extends Model<AssetTransactionType,AssetTransa
 
   @HasMany(() => Asset)
   assets!: Asset[];
-
-  @HasMany(() => AssetLog)
-  assetLogs!: AssetLog[];
 
   @HasMany(() => AssetTransaction)
   assetTransactions!: AssetTransaction[];

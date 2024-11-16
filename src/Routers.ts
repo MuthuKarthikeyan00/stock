@@ -7,8 +7,9 @@ import Asset from './controllers/Asset';
 import AssetType from './controllers/AssetType';
 import AssetStatus from './controllers/AssetStatus';
 import EmployeeBranch from './controllers/EmployeeBranch';
-import AssetLog from './controllers/AssetLog';
+import AssetTransaction from './controllers/AssetTransaction';
 import AssetTransactionType from './controllers/AssetTransactionType';
+
 
 export default class Routers {
     private static router = Router();
@@ -78,11 +79,17 @@ export default class Routers {
         this.router.post('/employeeBranch/:id',EmployeeBranch.update);
         this.router.get('/employeeBranchDelete/:id',EmployeeBranch.delete);
 
-        this.router.get('/assetIssue',AssetLog.IssueRender);
-        this.router.get('/assetReturn',AssetLog.returnRender);
-        this.router.get('/assetScrap',AssetLog.scrapRender);
+        this.router.get('/assetIssue',AssetTransaction.issueRender);
+        this.router.get('/assetReturn',AssetTransaction.returnRender);
+        this.router.get('/assetScrap',AssetTransaction.scrapRender);
 
-        this.router.post('/assetLog',AssetLog.create);
+        this.router.get('/assetsHistroy',AssetTransaction.assetsHistroyRender);
+        this.router.post('/getAssetsHistory',AssetTransaction.getAssetsHistory);
+
+        this.router.get('/stockView',AssetTransaction.stockViewRender);
+        this.router.post('/getStockView',AssetTransaction.getStockView);
+
+        this.router.post('/assetTransaction',AssetTransaction.create);
 
 
 
