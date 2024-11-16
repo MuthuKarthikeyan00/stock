@@ -63,6 +63,7 @@ block content
                             th Type
                             th Status
                             th Amount
+                            th Employee
                             th actions
                     tbody
             .tab-pane.fade#add(role="tabpanel")
@@ -110,6 +111,7 @@ block content
                 { data: 'typeId' },
                 { data: 'assetStatusId' },
                 { data: 'amount' },
+                { data: 'employeeId' },
                 {
                     data: 'id', 
                     render: function(data, type, row) {

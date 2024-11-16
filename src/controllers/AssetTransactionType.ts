@@ -38,7 +38,9 @@ export default class AssetTransactionType {
     try {
 
       const status = await Validator.validate(req.body, employeeRoleValidationSchema, res)
-
+      if(!status){
+        return ResponseHandler.error(res);
+      }
       const body = req.body;
       const args = await AssetTransactionType.handleData(body);
 
@@ -47,7 +49,7 @@ export default class AssetTransactionType {
         createdAt: new Date().toISOString(),
       });
       
-      if (Utils.isGraterthenZero(data.id)) return ResponseHandler.success(res, 201, data);
+      if (Utils.isGraterthenZero(data.id)) return res.status(201).redirect('/assetTransactionType'); 
       return ResponseHandler.error(res);
 
     } catch (error) {
@@ -70,6 +72,9 @@ export default class AssetTransactionType {
         );
       }
       const status = await Validator.validate(req.body, employeeRoleValidationSchema, res)
+      if(!status){
+        return ResponseHandler.error(res);
+      }
       const args = await AssetTransactionType.handleData(body);
       args.updatedAt = new Date().toISOString();
 
@@ -92,7 +97,7 @@ export default class AssetTransactionType {
         }
       });
      
-      if (Utils.isGraterthenZero(updated_id[0])) return ResponseHandler.success(res, 200, {});
+      if (Utils.isGraterthenZero(updated_id[0])) return res.status(201).redirect('/assetTransactionType'); 
       return ResponseHandler.error(res);
     } catch (error) {
       return ResponseHandler.error(res, error);
@@ -132,7 +137,7 @@ export default class AssetTransactionType {
         }
       });
      
-      if (Utils.isGraterthenZero(updated_id[0])) return ResponseHandler.success(res, 200, {});
+      if (Utils.isGraterthenZero(updated_id[0])) return res.status(201).redirect('/assetTransactionType'); 
       return ResponseHandler.error(res);
     } catch (error) {
       return ResponseHandler.error(res, error);

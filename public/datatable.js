@@ -24,15 +24,19 @@ function initializeDataTable(selector, ajaxUrl, columns, args={}) {
             responsive: true,
             paging: true,
             searching: true,
-            // drawCallback: function(settings) {
-            //     var api = this.api();               
-            //     var total = api.column(5).data().reduce(function(a, b) {
-            //          a = a || 0;
-            //          b = b || 0;
-            //         return a + parseFloat(b);
-            //     }, 0);
-            //     $(api.column(5).footer()).html(total.toFixed(2));
-            // },
+
+            
+            drawCallback: function(settings) {              
+                if(args?.footerVisble){
+                    var api = this.api();               
+                    var total = api.column(5).data().reduce(function(a, b) {
+                        a = a || 0;
+                        b = b || 0;
+                     return a + parseFloat(b);
+                    }, 0);
+                    $(api.column(5).footer()).html(total.toFixed(2));
+                }
+            },
         });
     });
 }

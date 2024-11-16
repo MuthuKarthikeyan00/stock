@@ -62,17 +62,20 @@ block content
     script.
         $('#stockViewContainer').hide();
         $('.searchFileds').on('change', function() {
-            console.log(1);
             var selectedOption = parseInt($(this).find('option:selected').val(), 10);
-            
+                if ($.fn.dataTable.isDataTable('#stockView')) {
+                    $('#stockView').DataTable().clear().destroy();
+                    }
                 initializeDataTable('#stockView', '/getStockView', [
                     { data: 'assetName' },
-                    { data: 'assetModel' },
-                    { data: 'categoryName' },
                     { data: 'statusName' },
+                    { data: 'categoryName' },
                     { data: 'employeeName' },
                     { data: 'branchName' },
+                    { data: 'assetModel' },
+                                       
                 ],{
+                    assetId : selectedOption,footerVisble:true,
                     assetId : parseInt($('#assetId').find('option:selected').val(), 10),
                     assetStatusId :  parseInt($('#assetStatusId').find('option:selected').val(), 10),
                     assetcategoryId :  parseInt($('#assetcategoryId').find('option:selected').val(), 10),

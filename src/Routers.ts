@@ -88,15 +88,10 @@ export default class Routers {
 
         this.router.get('/stockView',AssetTransaction.stockViewRender);
         this.router.post('/getStockView',AssetTransaction.getStockView);
-
         this.router.post('/assetTransaction',AssetTransaction.create);
 
-
-
         this.router.get('/', (req: Request, res: Response) => {
-            res.status(200).render('index', {
-              docTitle: "",
-            });
+            res.status(200).redirect("/employee");
         });
 
         return this.router;

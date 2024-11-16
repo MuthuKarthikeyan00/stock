@@ -105,6 +105,9 @@ export default class AssetTransaction {
       const body = req.body;
       const args = await AssetTransaction.handleData(body);
       const status = await Validator.validate(args, AssetTransactionValidationSchema, res)
+      if(!status){
+        return ResponseHandler.error(res);
+      }
       args.createdAt = new Date().toISOString();
 
 
@@ -118,11 +121,9 @@ export default class AssetTransaction {
             id: data.assetId,
           }
         });
-        return ResponseHandler.success(res, 201, data);
+        return res.status(201).redirect('/stockView'); 
       }
-
       return ResponseHandler.error(res);
-
     } catch (error) {
       return ResponseHandler.error(res, error);
     }

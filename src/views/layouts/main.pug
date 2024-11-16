@@ -13,11 +13,11 @@ html(lang="en")
             section(class='header_left d-flex justify-content-center align-items-center border')  
                 h3 stocks
             section(class='header_right border')  
-                h1 mk
+                h1 
         section(class='main_conatiner border') 
             aside(class='main_left border')  
                 nav.flex-column.nav
-                    a.nav-link.active(href="employee") Employee Master
+                    a.nav-link(href="employee") Employee Master
                     a.nav-link(href="employeeRole") Employee Role
                     a.nav-link(href="employeeBranch") Employee Branch
                     a.nav-link(href="asset") Asset Master
@@ -34,6 +34,10 @@ html(lang="en")
             main(class='main_right border')  
                 block content
         script.
+            $(document).ready(function() {
+                const currentPath = window.location.pathname.substring(1); // Remove leading '/'
+                $('a.nav-link[href="' + currentPath + '"]').addClass('active');
+            });
             //- (() => {
             //-     const forms = document.querySelectorAll('.needs-validation')
             //-     Array.prototype.slice.call(forms).forEach(form => {

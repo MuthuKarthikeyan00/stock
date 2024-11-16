@@ -11,6 +11,10 @@ import  AssetType  from "@src/controllers/AssetType";
 import AssetStatus from "./AssetStatus";
 import { Employee } from "@src/models/Employee";
 import { AssetTransaction } from "@src/models/AssetTransaction";
+import { AssetStatus as AssetStatusModel } from "@src/models/AssetStatus";
+import { AssetCategory as AssetCategoryModel } from "@src/models/AssetCategory";
+import { AssetType as AssetTypeModel } from "@src/models/AssetType";
+import { Employee as EmployeeModel } from "@src/models/Employee";
 
 
 
@@ -58,6 +62,9 @@ export default class Asset {
       const body = req.body;
       const args = await Asset.handleData(body);
       const status = await Validator.validate(args, assetValidationSchema, res)
+      if(!status){
+        return ResponseHandler.error(res);
+      }
       args.craetedAt = new Date().toISOString();
       args.assetStatusId =  1;
       args.assetTransactionTypeId =  1;
@@ -73,7 +80,7 @@ export default class Asset {
           createdAt: new Date().toISOString()
         })
 
-        if (Utils.isGraterthenZero(result.id)) return ResponseHandler.success(res, 201, data);
+        if (Utils.isGraterthenZero(result.id)) return res.status(201).redirect('/asset'); 
 
       }
       return ResponseHandler.error(res);
@@ -103,6 +110,9 @@ export default class Asset {
       console.log(args);
       
       const status = await Validator.validate(args, assetValidationSchema, res)
+      if(!status){
+        return ResponseHandler.error(res);
+      }
       args.updatedAt = new Date().toISOString();
       args.statusId =  1;
 
@@ -125,7 +135,7 @@ export default class Asset {
         }
       });
 
-      if (Utils.isGraterthenZero(updated_id[0])) return ResponseHandler.success(res, 200, {});
+      if (Utils.isGraterthenZero(updated_id[0])) return res.status(201).redirect('/asset'); 
       return ResponseHandler.error(res);
     } catch (error) {
       return ResponseHandler.error(res, error);
@@ -193,22 +203,60 @@ export default class Asset {
         }),
       };
 
-      const data = await AssetModel.findAndCountAll({
+      const { count, rows } = await AssetModel.findAndCountAll({
         where: whereClause,
         offset: offset,
         limit: limit,
         order: [[String(orderColumn), String(orderDir)]],
 
+        include: [
+          {
+            model: AssetStatusModel,
+            attributes: [ ['name', 'assetStatusName']],
+            required: false 
+          },
+          {
+            model: AssetCategoryModel,
+            attributes: [ ['name', 'assetCategoryName']],
+            required: false 
+          },
+          {
+            model: AssetTypeModel,
+            attributes: [ ['name', 'assetTypeName']],
+            required: false 
+          },
+          {
+            model: EmployeeModel,
+            attributes: [ ['name', 'employeeName']],
+            required: false 
+          }
+        ],
+        raw: true
       });
 
+      const data =  rows.map((row : any) => {
+        return {
+          id: row.id,
+          name: row.name,
+          serialNumber: row.serialNumber,
+          model: row.model,
+          categoryId :row['assetCategory.assetCategoryName'],
+          typeId : row['assetType.assetTypeName'],
+          assetStatusId : row['assetStatus.assetStatusName'],
+          employeeId : row['employee.employeeName'],
+          amount : row.amount,
+        }
+      })
+    
       res.json({
         draw: draw,
-        recordsTotal: data.count,
-        recordsFiltered: data.count,
-        data: data.rows,
+        recordsTotal: count,
+        recordsFiltered: count,
+        data,
       });
 
     } catch (error) {
+      return ResponseHandler.error(res, error);
     }
   }
 

@@ -7,6 +7,7 @@ import Validator from "@src/validator/Validator";
 import { employeeValidationSchema } from "@src/validator/schema";
 import { Op, where } from "sequelize";
 import { EmployeeRole as EmployeeRoleModel } from "@src/models/EmployeeRole";
+import { EmployeeBranch as EmployeeBranchModel } from "@src/models/EmployeeBranch";
 import EmployeeBranch from "./EmployeeBranch";
 import EmployeeRole from "./EmployeeRole";
 
@@ -52,7 +53,9 @@ export default class Employee {
       const body = req.body;
       const args = await Employee.handleData(body);
       const status = await Validator.validate(args, employeeValidationSchema, res)
-
+      if(!status){
+        return ResponseHandler.error(res);
+      }
       const data = await EmployeeModel.create({
         name: args.name,
         email: args.email,
@@ -62,7 +65,7 @@ export default class Employee {
         createdAt: new Date().toISOString(),
       });
 
-      if (Utils.isGraterthenZero(data.id)) return ResponseHandler.success(res, 201, data);
+      if (Utils.isGraterthenZero(data.id)) return res.status(201).redirect('/employee'); 
       return ResponseHandler.error(res);
 
     } catch (error) {
@@ -88,6 +91,9 @@ export default class Employee {
 
       const args = await Employee.handleData(body);
       const status = await Validator.validate(args, employeeValidationSchema, res)
+      if(!status){
+        return ResponseHandler.error(res);
+      }
       args.updatedAt = new Date().toISOString();
 
       const isValid = await EmployeeModel.findOne({
@@ -109,7 +115,7 @@ export default class Employee {
         }
       });
 
-      if (Utils.isGraterthenZero(updated_id[0])) return ResponseHandler.success(res, 200, {});
+      if (Utils.isGraterthenZero(updated_id[0])) return res.status(201).redirect('/employee'); 
       return ResponseHandler.error(res);
     } catch (error) {
       return ResponseHandler.error(res, error);
@@ -149,7 +155,7 @@ export default class Employee {
         }
       });
 
-      if (Utils.isGraterthenZero(updated_id[0])) return ResponseHandler.success(res, 200, {});
+      if (Utils.isGraterthenZero(updated_id[0])) return res.status(201).redirect('/employee'); 
       return ResponseHandler.error(res);
     } catch (error) {
       return ResponseHandler.error(res, error);
@@ -178,20 +184,44 @@ export default class Employee {
       };
 
 
-      const data = await EmployeeModel.findAndCountAll({
+      const { count, rows } = await EmployeeModel.findAndCountAll({
         where: whereClause,
         offset: offset,
         limit: limit,
         order: [[String(orderColumn), String(orderDir)]],
-
+        include: [
+          {
+            model: EmployeeBranchModel,
+            attributes: [ ['name', 'employeeBranchName']],
+            required: false 
+          },
+          {
+            model: EmployeeRoleModel,
+            attributes: [ ['name', 'employeeRoleName']],
+            required: false 
+          }
+        ],
+        raw: true
       });
+
+
+      const data =  rows.map((row : any) => {
+        return {
+          id: row.id,
+          name: row.name,
+          email: row.email,
+          phone: row.phone,
+          roleId :row['employeeRole.employeeRoleName'],
+          branchId : row['employeeBranch.employeeBranchName'],
+        }
+      })
 
       res.json({
         draw: draw,
-        recordsTotal: data.count,
-        recordsFiltered: data.count,
-        data: data.rows,
-      });
+        recordsTotal: count,
+        recordsFiltered: count,
+        data,
+      })
 
     } catch (error) {
     }

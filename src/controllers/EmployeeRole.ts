@@ -38,7 +38,9 @@ export default class EmployeeRole {
     try {
 
       const status = await Validator.validate(req.body, employeeRoleValidationSchema, res)
-
+      if(!status){
+        return ResponseHandler.error(res);
+      }
       const body = req.body;
       const args = await EmployeeRole.handleData(body);
 
@@ -47,7 +49,7 @@ export default class EmployeeRole {
         createdAt: new Date().toISOString(),
       });
       
-      if (Utils.isGraterthenZero(data.id)) return ResponseHandler.success(res, 201, data);
+      if (Utils.isGraterthenZero(data.id)) return res.status(201).redirect('/employeeRole'); 
       return ResponseHandler.error(res);
 
     } catch (error) {
@@ -70,6 +72,9 @@ export default class EmployeeRole {
         );
       }
       const status = await Validator.validate(req.body, employeeRoleValidationSchema, res)
+      if(!status){
+        return ResponseHandler.error(res);
+      }
       const args = await EmployeeRole.handleData(body);
       args.updatedAt = new Date().toISOString();
 
@@ -92,7 +97,7 @@ export default class EmployeeRole {
         }
       });
      
-      if (Utils.isGraterthenZero(updated_id[0])) return ResponseHandler.success(res, 200, {});
+      if (Utils.isGraterthenZero(updated_id[0])) return res.status(201).redirect('/employeeRole'); 
       return ResponseHandler.error(res);
     } catch (error) {
       return ResponseHandler.error(res, error);
@@ -132,7 +137,7 @@ export default class EmployeeRole {
         }
       });
      
-      if (Utils.isGraterthenZero(updated_id[0])) return ResponseHandler.success(res, 200, {});
+      if (Utils.isGraterthenZero(updated_id[0])) return res.status(201).redirect('/employeeRole'); 
       return ResponseHandler.error(res);
     } catch (error) {
       return ResponseHandler.error(res, error);
