@@ -71,10 +71,10 @@ export default class AssetTransaction {
   public static async stockViewRender(req: Request, res: Response) {
 
     const employees = await Employee.fetch();
-    const assets = await Asset.fetch();
+    const assets = await Asset.fetch({assetStatusIds:[1,2,3]});
     const branches = await EmployeeBranch.fetch()   
     const assetCategories = await AssetCategory.fetch();
-    const assetStatuses = await AssetStatus.fetch();
+    const assetStatuses = await AssetStatus.fetch({ids : [1,2,3]});
     
 
     return res.status(200).render('stockView', {
@@ -220,7 +220,7 @@ export default class AssetTransaction {
       const branchId = args?.branchId || null;
   
   
-      let whereClause = `WHERE assets.id > 0`;
+      let whereClause = `WHERE assets."assetStatusId" != 4 `;
       if (assetId >0) {
         whereClause += ` AND assets.id = ${assetId}`;
       }
@@ -251,20 +251,20 @@ export default class AssetTransaction {
           employees.name AS "employeeName",
           employee_branches.name AS "branchName"
         FROM assets
-        INNER JOIN asset_categories ON asset_categories.id = assets."categoryId"
-        INNER JOIN asset_statuses ON asset_statuses.id = assets."assetStatusId"
-        INNER JOIN employees ON employees.id = assets."employeeId"
-        INNER JOIN employee_branches ON employee_branches.id = employees."branchId"
+        LEFT JOIN asset_categories ON asset_categories.id = assets."categoryId"
+        LEFT JOIN asset_statuses ON asset_statuses.id = assets."assetStatusId"
+        LEFT JOIN employees ON employees.id = assets."employeeId"
+        LEFT JOIN employee_branches ON employee_branches.id = employees."branchId"
         ${whereClause}
       `;
 
       const countQuery = `
         SELECT COUNT(*) AS "count"
         FROM assets
-        INNER JOIN asset_categories ON asset_categories.id = assets."categoryId"
-        INNER JOIN asset_statuses ON asset_statuses.id = assets."assetStatusId"
-        INNER JOIN employees ON employees.id = assets."employeeId"
-        INNER JOIN employee_branches ON employee_branches.id = employees."branchId"
+        LEFT JOIN asset_categories ON asset_categories.id = assets."categoryId"
+        LEFT JOIN asset_statuses ON asset_statuses.id = assets."assetStatusId"
+        LEFT JOIN employees ON employees.id = assets."employeeId"
+        LEFT JOIN employee_branches ON employee_branches.id = employees."branchId"
         ${whereClause};
       `;
   

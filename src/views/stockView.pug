@@ -42,6 +42,7 @@ block content
                     table#stockView.table.table-striped.table-bordered
                         thead
                             tr
+                                th S/no
                                 th Asset
                                 th Status
                                 th Category 
@@ -51,7 +52,7 @@ block content
                         tbody    
                         tfoot
                             tr
-                                th(colspan="5" style="text-align:right") Total
+                                th(colspan="6" style="text-align:right") Total
                                 th#total-amount
                         tfoot
 
@@ -75,7 +76,7 @@ block content
                     { data: 'assetModel' },
                                        
                 ],{
-                    assetId : selectedOption,footerVisble:true,
+                    footerVisble:true,
                     assetId : parseInt($('#assetId').find('option:selected').val(), 10),
                     assetStatusId :  parseInt($('#assetStatusId').find('option:selected').val(), 10),
                     assetcategoryId :  parseInt($('#assetcategoryId').find('option:selected').val(), 10),

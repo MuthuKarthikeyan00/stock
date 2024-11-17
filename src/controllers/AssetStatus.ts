@@ -191,13 +191,16 @@ export default class AssetStatus {
 
   public static async fetch(args: any = {}) {
     const search = args?.search || '';
-
+    const ids = args?.ids || [1, 2, 3, 4];
     const assetCategories = await AssetStatusModel.findAll({
       attributes: [
         ['id', 'value'],
         ['name', 'label']
       ],
       where: {
+        id: {
+          [Op.in]:ids
+        },
         isDeleted: {
           [Op.is]: null
         },
